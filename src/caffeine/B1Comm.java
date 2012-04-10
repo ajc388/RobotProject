@@ -14,6 +14,8 @@ public class B1Comm {
 	}
 	public void notifyLineDetected(){
 		//Notify that a line was detected to navigator
+		//This is a test
+		//Comment added by Andrew Carter
 	}
 	public void transmitColor (boolean wasRed){
 		//Transmits the detected color
