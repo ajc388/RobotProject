@@ -115,4 +115,9 @@ public class Navigator {
 		nav.navigateTo(-5.0f, 5.0f);
 		nav.navigateBackToZero();
 	}
+	
+	
+//Steffen, just put the code you already made in here
+//Add things to notify the mapper that you're at coordinates at the end of movement, request new ones
+//Add stop command to override current movement when a line or ball is detected
 }
