@@ -6,16 +6,36 @@ package caffeine;
  * 
  * 
 
-Request for current coordinates (code)
+/*==============================================*
+ *  	        PORTS CONVENTION	   	*
+ *  						*
+ *	Brick 1					*
+ *	MotorA == Left wheel			*
+ *	MotorB == Right wheel			*
+ *	MotorC == Cage				*
+ *	SensorPort1 == Left Ultra Sensor	*
+ *	SensorPort2 == Forward Ultra Sensor	*
+ *	SensorPort3 == Right Ultra Sensor	*
+ *	SensorPort4 == Compass Sensor		*
+ *						*
+ *  	Brick 2					*
+ *  	SensorPort1 == LightSensor		*
+ *  	SensorPort2 == ColorSensor		*
+ *  						*
+ * =============================================*
  */
+ 
+
+
+
+//Request for current coordinates (code)
 public class B1Comm {
 	public B1Comm(){
 		
 	}
 	public void notifyLineDetected(){
 		//Notify that a line was detected to navigator
-		//This is a test
-		//Comment added by Andrew Carter
+	    
 	}
 	public void transmitColor (boolean wasRed){
 		//Transmits the detected color
