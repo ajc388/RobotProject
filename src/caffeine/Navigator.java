@@ -20,29 +20,28 @@ public class Navigator {
 	private CompassPilot pilot;
 
 	/** Simple representation of a point */
-	private float lastX, lastY;
-	private float x, y;
-	private float curAngle;
+	private double lastX, lastY;
+	private double x, y;
+	private double curAngle;
 
 	/** Scale for movement distance between adjacent points */
-	private final float SCALE = 20.0f;
+	private final double SCALE = 20.0;
 
 	/**
 	 * Constructor
 	 * @param compass - takes a compass so we can abstract away from port selection
 	 * @param pilot - takes a pilot so we can set that up elsewhere
 	 */
-
 	public Navigator(CompassSensor compass, CompassPilot pilot) {
 		this.compass = compass;
 		this.pilot = pilot;
 
 		compass.resetCartesianZero();
-		x = 0.0f;
-		y = 0.0f;
+		x = 0.0;
+		y = 0.0;
 		lastX = x;
 		lastY = y;
-		curAngle = 0.0f;
+		curAngle = 0.0;
 	}
 
 	/**
@@ -50,12 +49,11 @@ public class Navigator {
 	 * Begins traveling and returns immediately.
 	 * This allows for the movement to be interrupted.
 	 */
-
-	public void navigateTo(float newX, float newY) {
-		float dx = newX - x;
-		float dy = newY - y;
-		float angle = calcAngleTo(dx, dy);
-		float distance = calcDistanceTo(dx, dy) * SCALE;
+	public void navigateTo(double newX, double newY) {
+		double dx = newX - x;
+		double dy = newY - y;
+		double angle = calcAngleTo(dx, dy);
+		double distance = calcDistanceTo(dx, dy) * SCALE;
 
 		pilot.rotate(angle);
 		pilot.travel(distance, true);
@@ -81,25 +79,25 @@ public class Navigator {
 	 * of my head.
 	 */
 	public void emergencyStop() {
-		float distActual = pilot.getMovementIncrement();
+		double distActual = pilot.getMovementIncrement();
 		pilot.stop(); // API shows method quickStop() but it doesn't seem to be included. Use stop() for now.
-		float dxTheoretical = x - lastX;
-		float dyTheoretical = y - lastY;
-		float distTheoretical = calcDistanceTo(dxTheoretical, dyTheoretical);
-		float ratio = distActual / distTheoretical;
-		float dxActual = dxTheoretical * ratio;
-		float dyActual = dyTheoretical * ratio;
+		double dxTheoretical = x - lastX;
+		double dyTheoretical = y - lastY;
+		double distTheoretical = calcDistanceTo(dxTheoretical, dyTheoretical);
+		double ratio = distActual / distTheoretical;
+		double dxActual = dxTheoretical * ratio;
+		double dyActual = dyTheoretical * ratio;
 		x = lastX + dxActual;
 		y = lastY + dyActual;
 	}
 
-	private float calcAngleTo(float dx, float dy) {
+	private double calcAngleTo(double dx, double dy) {
 		//This is bad, but should work, it just won't always make the shortest turn at the moment.
-		return (float) (-Math.atan2(dx, dy) * 180 / Math.PI) - curAngle;
+		return (-Math.atan2(dx, dy) * 180 / Math.PI) - curAngle;
 	}
 
-	private float calcDistanceTo(float dx, float dy) {
-		return (float) Math.sqrt(dx * dx + dy * dy);
+	private double calcDistanceTo(double dx, double dy) {
+		return Math.sqrt(dx * dx + dy * dy);
 	}
 	
 	public static void main(String[] args) {
@@ -110,9 +108,9 @@ public class Navigator {
 		pilot.setRotateSpeed(20.0f);
 		Navigator nav = new Navigator(compass, pilot);
 
-		nav.navigateTo(5.0f, 1.0f);
-		nav.navigateTo(-5.0f, 3.0f);
-		nav.navigateTo(-5.0f, 5.0f);
+		nav.navigateTo(5.0, 1.0);
+		nav.navigateTo(-5.0, 3.0);
+		nav.navigateTo(-5.0, 5.0);
 		nav.navigateBackToZero();
 	}
 	
