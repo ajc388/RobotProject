@@ -100,6 +100,26 @@ public class Navigator {
 		return Math.sqrt(dx * dx + dy * dy);
 	}
 	
+	/**
+	 * public getter for robots x position. Won't be 
+	 * accurate if the robot is moving at the time. 
+	 * This could potentially be fixed, but I don't see a reason
+	 * for it at this time.
+	 */
+	public double getX() {
+		return x;
+	}
+	
+	/**
+	 * public getter for robots y position. Won't be 
+	 * accurate if the robot is moving at the time. 
+	 * This could potentially be fixed, but I don't see a reason
+	 * for it at this time.
+	 */
+	public double getY() {
+		return y;
+	}
+	
 	public static void main(String[] args) {
 		Button.ENTER.waitForPress();
 		CompassSensor compass = new CompassSensor(SensorPort.S4);
