@@ -66,6 +66,8 @@ public class B1Comm {
 		//Code 4, followed by 2 longs
 		try {
 			dos.writeByte(4);
+			dos.writeLong(x);
+			dos.writeLong(y);
 		} catch (IOException e) {
 		}
 	}
