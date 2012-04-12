@@ -21,6 +21,9 @@ public class Navigator {
 	private long lastX, lastY;
 	private long x, y;
 	private double curAngle;
+	
+	/** Boolean flag to decide what to listen to */
+	private boolean listenToMapper;
 
 	/**
 	 * Constructor
@@ -31,6 +34,8 @@ public class Navigator {
 		this.compass = compass;
 		this.pilot = pilot;
 
+		listenToMapper = true;
+		
 		compass.resetCartesianZero();
 		x = 0;
 		y = 0;
@@ -102,6 +107,14 @@ public class Navigator {
 	public void travel(long distance) {
 		pilot.travel(distance);
 		//add ability to calc new coords.
+	}
+	
+	public boolean listeningToMapper() {
+		return listenToMapper;
+	}
+	
+	public void toggleListenToMapper(boolean listenToMapper) {
+		this.listenToMapper = listenToMapper;
 	}
 	
 	/**
