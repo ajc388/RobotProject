@@ -1,4 +1,3 @@
-package caffeine;
 
 /*
  * Object detector residing on caffeine2

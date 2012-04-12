@@ -1,4 +1,3 @@
-package caffeine;
 
 /*
  * This is the Communicator to go on caffeine

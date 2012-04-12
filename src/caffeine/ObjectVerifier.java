@@ -1,5 +1,3 @@
-package caffeine;
-
 public class ObjectVerifier {
 	public ObjectVerifier(){
 		

@@ -1,5 +1,3 @@
-package caffeine;
-
 /*
  * Controls the cage, on brick caffeine
  */

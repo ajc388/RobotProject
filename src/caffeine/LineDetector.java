@@ -1,5 +1,3 @@
-package caffeine;
-
 import lejos.nxt.SensorPort;
 
 public class LineDetector {

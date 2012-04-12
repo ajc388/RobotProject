@@ -1,4 +1,3 @@
-package caffeine;
 
 import java.util.Stack;
 

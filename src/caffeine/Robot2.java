@@ -1,6 +1,3 @@
-package caffeine;
-
-
 public class Robot2 {
 
 	/**

@@ -1,5 +1,3 @@
-package caffeine;
-
 /*
  * This is the Communicator to go on caffeine2
  * this will receive communication initiation

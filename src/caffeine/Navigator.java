@@ -1,5 +1,3 @@
-package caffeine;
-
 import lejos.nxt.addon.CompassSensor;
 import lejos.robotics.navigation.CompassPilot;
 import java.lang.Math;
@@ -128,8 +126,8 @@ public class Navigator {
 		pilot.setRotateSpeed(20.0f);
 		Navigator nav = new Navigator(compass, pilot);
 
-		nav.navigateTo(5.0, 1.0);
-		nav.navigateTo(-5.0, 3.0);
+		nav.navigateTo(5.0, 0.0);
+		nav.navigateTo(5.0, 5.0);
 		nav.navigateTo(-5.0, 5.0);
 		nav.navigateBackToZero();
 	}
