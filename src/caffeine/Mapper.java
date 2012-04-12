@@ -1,4 +1,3 @@
-
 import java.util.Stack;
 
 import lejos.nxt.LCD;
@@ -11,31 +10,22 @@ import lejos.nxt.LCD;
  * 
  */
 public class Mapper {
-	private static enum mapObject {UNVISITED_LOCATION, VISITED_LOCATION, BORDER,
+	private B1Comm commRef;
+	private static enum mapObject {UNVISITED_LOCATION, SCANNED_LOCATION, BORDER,
 	    				STARTING_POINT, STARTING_BORDER, BLUE_BALL, RED_BALL }
 	
 	private static mapObject[][] map;
-	//Arbitrarily defined unit
-	//500*5 = 2500cm 
-	private static final int mapSize = 500;
-	//Units in centimeters
-	private static final int mapIncrement = 5;
-	private B1Comm commRef;
+	private static final int mapSize = 500;		//Units	
+	private static final int mapIncrement = 5;	//Units in centimeters
 	
 	//Robot position
-	private double xRobotPosition;
-	private double yRobotPosition;
-	private final double xStartPosition;
-	private final double yStartPosition;
+	private long xRobotPosition;
+	private long yRobotPosition;
+	private final long xStartPosition;
+	private final long yStartPosition;
 	
-	//Object Class
-	Stack superStack = new Stack();
-	
-	
-	//Constructor
 	//Builds the map object based upon the constants mapsize
-	//calculate the origin
-	//build the border around the origin
+	//issues order to navigate forward
     	public Mapper(B1Comm pComm ) {
     	    commRef = pComm;
     	    map = new mapObject[mapSize][mapSize];
@@ -66,55 +56,22 @@ public class Mapper {
     		map[((mapSize/2)-(width/2)) ][((mapSize/2)-(height/2))+j] = mapObject.STARTING_BORDER;  
     		map[((mapSize/2)+(width/2)) ][((mapSize/2)-(height/2))+j] = mapObject.STARTING_BORDER;
     	    }
-	
+    	    //Start by asking the motor to move forward 20cm
+    	    commRef.transmitNavCommand( goToX(xRobotPosition), goToY(yRobotPosition+5) );
     	}
+    	//==============================================\\
+    	//    		MOVEMENT COMMANDS 		\\
+    	//==============================================\\
+    	//GoTo Command
+    	public long goToX(long x) {  return convertToNavCoordinates(x);  }
+    	public long goToY(long y) {  return convertToNavCoordinates(y);  }
     	
-    	
-    	//The events to update the map are outsourced to the navigator and light detector
-    	//The specific coordinates of the update are tracked by the navigator
-    	//Since that data is relient on how the navigator moves.
-    	//This method just allows the person to give the current coordinates to the map
-    	//along with the object needed for the update
-    	public void updatePosition(double x, double y) {
-    	    xRobotPosition = x;
-    	    yRobotPosition = y;
-    	    map[convertToMapCoordinates(x)][convertToMapCoordinates(y)] = mapObject.VISITED_LOCATION;    
-    	}
-    	
-    	//Also updates position
-    	public void updateBoundary(double x, double y ) {
-    	    xRobotPosition = x;
-    	    yRobotPosition = y;
-    	    map[convertToMapCoordinates(x)][convertToMapCoordinates(y)] = mapObject.BORDER;
-    	}
-    	
-    	//robot position does not change
-    	public void updateBlueBall(double x, double y ) {
-    	    map[convertToMapCoordinates(x)][convertToMapCoordinates(y)] = mapObject.BLUE_BALL;  	    
-    	}
-    	
-    	
-    	//This works under the assumption that the coordinates tracked by the navigator
-    	//are measured in centimeters
-    	//It also assumes that the starting location for the purposes of those coordinates is
-    	//set to 0, however the starting location on the map is 250,250
-    	//so it must be mapped to match this assuming that the map coordinates go
-    	//in intervals of 5cm
-    	private int convertToMapCoordinates( double coordinate ) {
-    	    return (int)((coordinate + (mapSize*mapIncrement) ) / mapIncrement); 
-    	}
-    	
-    	
-    	/*Returns a queue of suggested points to return
-    	 * back home
-    	 */
+    	/*Tell the robot to go back home at 0,0*/
 	public void returnHome() {
-	   
-	   int xRobotPosition = (int) getXStartPosition();
-	   int yRobotoPosition = (int) getYStartPosition();
-	    
+	   commRef.transmitNavCommand(0,0);
 	}
 	
+	//Exploration algorithm
 	public void exploreField(int searchIncrement) {
 	    double x = getXRobotPosition();
 	    double y = getYRobotPosition();
@@ -130,17 +87,15 @@ public class Mapper {
 	    //If the boundaries are all beyond the array
 	    //Then there is no unexplored areas to be found.
 	    if (   (lowerBoundX <= 0) && (lowerBoundY < 0)
-		 && (upperBoundX >= 500) && (upperBoundY > 500 )) {
+		 && (upperBoundX >= mapSize) && (upperBoundY > mapSize )) {
 		//Print robots actions
 		LCD.clear();
 		LCD.drawString("No unexplored", 0, 3);
 		LCD.drawString(" areas found.", 0, 4);
 		LCD.drawString("Going home.", 0 , 5);
 		LCD.refresh();
-		
 		//Return home
-		returnHome();
-		
+		returnHome();	
 	    } else {
 		//Makes sure there will be no stack
 		//overflow exceptions
@@ -150,45 +105,86 @@ public class Mapper {
     	    	if ( lowerBoundY < 0 ) {
     	    	    lowerBoundY = 0;
     	    	}
-	    
     	    	//Scan the entire section for unvisited elements in the array
     	    	for ( int i = lowerBoundX ; i < searchIncrement && i < mapSize; i++ ) {
     	    	    for ( int j = lowerBoundY ; j < searchIncrement && j < mapSize; j++ ) {
-		
     	    		if ( map[i][j] == mapObject.UNVISITED_LOCATION ) {
-    	    		    //get points
-    	    		    //pass data to navigator
+    	    		    //send data
+    	    		    commRef.transmitNavCommand(goToX(i), goToY(j));
     	    		    break;
     	    		}
-		
     	    	    }
     	    	}
     	    	//If nothing is found, call the function again
-    	    	//And increase the search range
+    	    	//increase the search range and check again
 	        exploreField(searchIncrement*2);
 	    }
 	}
 	
-	private void suggestPoint() {
-	    
-	    	    
-	    
-	}
+	//	UPDATE MAP COMMANDS
+	// 	Should also mark the position of scanned regions on the field
+    	public void updatePosition(long x, long y) {
+    	    int sensorRange = 40;  //in centimeters
+    	    //Update position coordinates
+    	    xRobotPosition = x;
+    	    yRobotPosition = y;
+    	    
+    	    //Get adjusted map coordinates
+    	    int mapX = convertToMapCoordinates(x);
+    	    int mapY = convertToMapCoordinates(y);
+    	    
+    	    //Loop positions    	    
+    	    int leftPosition = (int) (mapX - (sensorRange/mapIncrement));
+    	    int rightPosition = (int) (mapX + (sensorRange/mapIncrement));
+    	    int topPosition = (int) (mapY - (sensorRange/mapIncrement));
+    	    
+    	    //Loop through coordinates
+    	    for ( int i = leftPosition ; i < rightPosition ; i++ ) {
+    		for ( int j = topPosition ; j >= y ; j--) {
+    		    if ( map[i][j] == mapObject.UNVISITED_LOCATION ) {
+    			map[i][j] = mapObject.SCANNED_LOCATION;
+    		    }
+    		}
+    	    }
+    	}
+    	
+    	//Also updates position
+    	public void updateBoundary(long x, long y ) {
+    	    xRobotPosition = x;
+    	    yRobotPosition = y;
+    	    map[convertToMapCoordinates(x)][convertToMapCoordinates(y)] = mapObject.BORDER;
+    	}
+    	
+    	//robot position does not change
+    	public void updateBlueBall(long x, long y ) {
+    	    map[convertToMapCoordinates(x)][convertToMapCoordinates(y)] = mapObject.BLUE_BALL;  	    
+    	}
 	
+    	//Converts to valid coordinates to and from
+    	//The navigator coordinate system
+    	private int convertToMapCoordinates( long coordinate ) {
+    	    return (int)((coordinate/mapIncrement) + (mapSize/2)); 
+    	}
+    	private long convertToNavCoordinates(long arrayCoordinate ) {
+    	    return (long)((arrayCoordinate - (mapSize/2)) * mapIncrement);
+    	}
+    	
 	//If the location is a border or a blue ball then it is not passable
 	//otherwise the location is good
-	public boolean isPassable(double x, double y) {
+	public boolean isPassable(long x, long y) {
 	    if ( map[(int)x][(int)y] == mapObject.BORDER  ) {	return false;   } 
 	    else if ( map[(int)x][(int)y] == mapObject.BLUE_BALL) {  return false; } 
 	    else { return true; }
 	}
 	
 	
-	public void getNewNav() {
-		//Determines the next point that needs to be explored, tells the navigator to explore it
-	}
+	//GETTERS
+	public double getXRobotPosition() { return xRobotPosition;  }
+	public double getYRobotPosition() { return yRobotPosition;  }
+	public double getXStartPosition() { return xStartPosition;  }
+	public double getYStartPosition() { return yStartPosition;  }
 	
-	
+	//Printout map
 	public String toString() {	    
 	    String mapPrintout = "Map Status\n";
 	    for (int i = 0; i < mapSize; i++) {
@@ -197,14 +193,6 @@ public class Mapper {
 		}
 		mapPrintout = "\n";
 	    }
-	    return mapPrintout;
-	    
+	    return mapPrintout;    
 	}
-	
-	
-	
-	public double getXRobotPosition() { return xRobotPosition;  }
-	public double getYRobotPosition() { return yRobotPosition;  }
-	public double getXStartPosition() { return xStartPosition;  }
-	public double getYStartPosition() { return yStartPosition;  }
 }
