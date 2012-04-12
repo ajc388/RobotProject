@@ -78,7 +78,7 @@ public class Navigator {
 	 * of my head.
 	 */
 	public void emergencyStop() {
-		long distActual = pilot.getMovementIncrement();
+		long distActual = (long) pilot.getMovementIncrement();
 		pilot.stop(); // API shows method quickStop() but it doesn't seem to be included. Use stop() for now.
 		long dxTheoretical = x - lastX;
 		long dyTheoretical = y - lastY;
@@ -97,6 +97,11 @@ public class Navigator {
 
 	private long calcDistanceTo(long dx, long dy) {
 		return (long) Math.sqrt(dx * dx + dy * dy);
+	}
+	
+	public void travel(long distance) {
+		pilot.travel(distance);
+		//add ability to calc new coords.
 	}
 	
 	/**
