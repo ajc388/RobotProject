@@ -18,12 +18,9 @@ public class Navigator {
 	private CompassPilot pilot;
 
 	/** Simple representation of a point */
-	private double lastX, lastY;
-	private double x, y;
+	private long lastX, lastY;
+	private long x, y;
 	private double curAngle;
-
-	/** Scale for movement distance between adjacent points */
-	private final double SCALE = 20.0;
 
 	/**
 	 * Constructor
@@ -35,8 +32,8 @@ public class Navigator {
 		this.pilot = pilot;
 
 		compass.resetCartesianZero();
-		x = 0.0;
-		y = 0.0;
+		x = 0;
+		y = 0;
 		lastX = x;
 		lastY = y;
 		curAngle = 0.0;
@@ -51,11 +48,11 @@ public class Navigator {
 	 * return... but the robot doesn't move. Not sure how to make this work.
 	 * So I reverted to the not immediate return.
 	 */
-	public void navigateTo(double newX, double newY) {
-		double dx = newX - x;
-		double dy = newY - y;
+	public void navigateTo(long newX, long newY) {
+		long dx = newX - x;
+		long dy = newY - y;
 		double angle = calcAngleTo(dx, dy);
-		double distance = calcDistanceTo(dx, dy);
+		long distance = calcDistanceTo(dx, dy);
 
 		pilot.rotate(angle);
 		pilot.travel(distance);
@@ -81,14 +78,14 @@ public class Navigator {
 	 * of my head.
 	 */
 	public void emergencyStop() {
-		double distActual = pilot.getMovementIncrement();
+		long distActual = pilot.getMovementIncrement();
 		pilot.stop(); // API shows method quickStop() but it doesn't seem to be included. Use stop() for now.
-		double dxTheoretical = x - lastX;
-		double dyTheoretical = y - lastY;
-		double distTheoretical = calcDistanceTo(dxTheoretical, dyTheoretical);
-		double ratio = distActual / distTheoretical;
-		double dxActual = dxTheoretical * ratio;
-		double dyActual = dyTheoretical * ratio;
+		long dxTheoretical = x - lastX;
+		long dyTheoretical = y - lastY;
+		long distTheoretical = calcDistanceTo(dxTheoretical, dyTheoretical);
+		long ratio = distActual / distTheoretical;
+		long dxActual = dxTheoretical * ratio;
+		long dyActual = dyTheoretical * ratio;
 		x = lastX + dxActual;
 		y = lastY + dyActual;
 	}
@@ -98,8 +95,8 @@ public class Navigator {
 		return (-Math.atan2(dx, dy) * 180 / Math.PI) - curAngle;
 	}
 
-	private double calcDistanceTo(double dx, double dy) {
-		return Math.sqrt(dx * dx + dy * dy);
+	private long calcDistanceTo(long dx, long dy) {
+		return (long) Math.sqrt(dx * dx + dy * dy);
 	}
 	
 	/**
@@ -108,7 +105,7 @@ public class Navigator {
 	 * This could potentially be fixed, but I don't see a reason
 	 * for it at this time.
 	 */
-	public double getX() {
+	public long getX() {
 		return x;
 	}
 	
@@ -118,21 +115,21 @@ public class Navigator {
 	 * This could potentially be fixed, but I don't see a reason
 	 * for it at this time.
 	 */
-	public double getY() {
+	public long getY() {
 		return y;
 	}
 	
 	public static void main(String[] args) {
 		Button.ENTER.waitForPress();
 		CompassSensor compass = new CompassSensor(SensorPort.S4);
-		CompassPilot pilot = new CompassPilot(compass, 3.17500f, 16.19250f, Motor.A, Motor.B);
+		CompassPilot pilot = new CompassPilot(compass, 2.9255357f, 16.19250f, Motor.A, Motor.B);
 		pilot.setTravelSpeed(20.0f);
 		pilot.setRotateSpeed(20.0f);
 		Navigator nav = new Navigator(compass, pilot);
 
-		nav.navigateTo(5.0, 0.0);
-		nav.navigateTo(5.0, 5.0);
-		nav.navigateTo(-5.0, 5.0);
+		nav.navigateTo(5, 0);
+		nav.navigateTo(5, 5);
+		nav.navigateTo(-5, 5);
 		nav.navigateBackToZero();
 	}
 	
