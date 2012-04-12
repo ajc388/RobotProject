@@ -1,5 +1,3 @@
-
-
 import lejos.nxt.NXTRegulatedMotor;
 
 /*
