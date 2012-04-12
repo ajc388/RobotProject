@@ -68,8 +68,8 @@ public class ObjectDetector implements Runnable{
 		int d2 = US2.getDistance();
 		int deltaX = (d1*d1+100-(d2*d2))/20;
 		int deltaY = (int)(Math.sqrt((double)(d1*d1-deltaX*deltaX)));
-		int Xn = nav.getX() + 9 + deltaX;
-		int Yn = nav.getY() - 4.5 + deltaY;
+		int Xn = (int)(nav.getX() + 9 + deltaX);
+		int Yn = (int)(nav.getY() - 4.5 + deltaY);
 		nav.navigateTo(Xn, Yn);
 		
 	}

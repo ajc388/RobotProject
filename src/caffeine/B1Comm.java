@@ -94,8 +94,8 @@ public class B1Comm {
 				switch (b) {
 				case 7: transmitColor(obj.isItRed()); break;
 				case 8: cage.lowerCage(); break;
-				case 9: map.getNewNav(); break;
-				case 10: map.notifyCoordinates(dis.readLong(), dis.readLong()); break;
+				//case 9: map.getNewNav(); break;
+				//case 10: map.notifyCoordinates(dis.readLong(), dis.readLong()); break;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
