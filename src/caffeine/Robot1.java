@@ -31,7 +31,7 @@ public class Robot1 {
 		rightWheel = new NXTRegulatedMotor(MotorPort.B);
 		cageMotor = new NXTRegulatedMotor(MotorPort.C);
 		
-		pilot = new CompassPilot(compass, WHEEL_DIAMETER, WHEEL_WIDTH, leftWheel, rightWheel);
+		pilot = new CompassPilot(compass, (float) WHEEL_DIAMETER, (float) WHEEL_WIDTH, leftWheel, rightWheel);
 		
 		navigator = new Navigator(compass, pilot);
 		mapper = new Mapper();
