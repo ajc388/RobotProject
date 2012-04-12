@@ -29,7 +29,6 @@ public class B1Comm {
 		dos = connection.openDataOutputStream();
 		dis = connection.openDataInputStream();
 		connected = true;
-		run();
 	}
 	
 	public void setMapper(Mapper map) {

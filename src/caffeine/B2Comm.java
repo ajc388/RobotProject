@@ -49,7 +49,6 @@ public class B2Comm implements Runnable{
 		connected = true;
 		dis = btc.openDataInputStream();
 		dos = btc.openDataOutputStream();
-		run();
 	}
 
 	public void setNavigator(Navigator nav){
