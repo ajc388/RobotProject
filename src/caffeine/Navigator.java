@@ -54,7 +54,7 @@ public class Navigator {
 		double distance = calcDistanceTo(dx, dy) * SCALE;
 
 		pilot.rotate(angle);
-		pilot.travel(distance, true);
+		pilot.travel(distance, false);
 		
 		lastX = x;
 		lastY = y;
