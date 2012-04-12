@@ -46,15 +46,19 @@ public class Navigator {
 	 * Rotates robot towards specified point.
 	 * Begins traveling and returns immediately.
 	 * This allows for the movement to be interrupted.
+	 * 
+	 * After testing... The travel method DOES immediately
+	 * return... but the robot doesn't move. Not sure how to make this work.
+	 * So I reverted to the not immediate return.
 	 */
 	public void navigateTo(double newX, double newY) {
 		double dx = newX - x;
 		double dy = newY - y;
 		double angle = calcAngleTo(dx, dy);
-		double distance = calcDistanceTo(dx, dy) * SCALE;
+		double distance = calcDistanceTo(dx, dy);
 
 		pilot.rotate(angle);
-		pilot.travel(distance, false);
+		pilot.travel(distance);
 		
 		lastX = x;
 		lastY = y;

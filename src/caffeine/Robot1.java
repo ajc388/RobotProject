@@ -36,8 +36,6 @@ public class Robot1 {
 		navigator = new Navigator(compass, pilot);
 		mapper = new Mapper();
 		cageController = new CageController(cageMotor);
-		
-		
 	}
 
 }
