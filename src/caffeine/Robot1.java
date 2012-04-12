@@ -20,8 +20,13 @@ public class Robot1 {
 	private Navigator navigator;
 	private Mapper mapper;
 	private CageController cageController;
+	private ObjectVerifier objectVerifier;
+	
+	private B1Comm b1;
 	
 	public Robot1(){
+		b1 = new B1Comm();
+		
 		left = new UltrasonicSensor(SensorPort.S1);
 		front = new UltrasonicSensor(SensorPort.S2);
 		right = new UltrasonicSensor(SensorPort.S3);
@@ -34,8 +39,12 @@ public class Robot1 {
 		pilot = new CompassPilot(compass, (float) WHEEL_DIAMETER, (float) WHEEL_WIDTH, leftWheel, rightWheel);
 		
 		navigator = new Navigator(compass, pilot);
-		mapper = new Mapper();
+		//mapper = new Mapper();
 		cageController = new CageController(cageMotor);
+		
+		b1.setCageController(cageController);
+		b1.setMapper(mapper);
+		b1.setObjectVerifier(objectVerifier);
 	}
 
 }
