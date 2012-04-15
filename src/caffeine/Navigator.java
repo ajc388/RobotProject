@@ -18,8 +18,8 @@ public class Navigator {
 	private CompassPilot pilot;
 
 	/** Simple representation of a point */
-	private long lastX, lastY;
-	private long x, y;
+	private double lastX, lastY;
+	private double x, y;
 	private double curAngle;
 	
 	/** Boolean flag to decide what to listen to */
@@ -41,7 +41,7 @@ public class Navigator {
 		y = 0;
 		lastX = x;
 		lastY = y;
-		curAngle = 0.0;
+		curAngle = 90.0;
 	}
 
 	/**
@@ -53,22 +53,31 @@ public class Navigator {
 	 * return... but the robot doesn't move. Not sure how to make this work.
 	 * So I reverted to the not immediate return.
 	 */
-	public void navigateTo(long newX, long newY) {
-		long dx = newX - x;
-		long dy = newY - y;
+	public void navigateTo(double newX, double newY) {
+		double dx = newX - x;
+		double dy = newY - y;
 		double angle = calcAngleTo(dx, dy);
-		long distance = calcDistanceTo(dx, dy);
+		double distance = calcDistanceTo(dx, dy);
 
-		pilot.rotate(angle);
-		pilot.travel(distance);
+		rotate(angle);
+		travel(distance);
+	}
+	
+	public void travel(double distance) {
+		pilot.travel(distance, true);
+		double dx = Math.cos(curAngle) * distance;
+		double dy = Math.sin(curAngle) * distance;
 		
 		lastX = x;
 		lastY = y;
-
-		// these values will be correct if the move actually completes.
-		// if it is interrupted, the x, y will need to be recalculated.
-		x = newX;
-		y = newY;
+		
+		x += dx;
+		y += dx;
+	}
+	
+	public void rotate(double angle) {
+		pilot.rotate(angle);
+		
 		curAngle = angle + curAngle;
 	}
 
@@ -83,16 +92,14 @@ public class Navigator {
 	 * of my head.
 	 */
 	public void emergencyStop() {
-		long distActual = (long) pilot.getMovementIncrement();
+		double distance = pilot.getMovementIncrement();
 		pilot.stop(); // API shows method quickStop() but it doesn't seem to be included. Use stop() for now.
-		long dxTheoretical = x - lastX;
-		long dyTheoretical = y - lastY;
-		long distTheoretical = calcDistanceTo(dxTheoretical, dyTheoretical);
-		long ratio = distActual / distTheoretical;
-		long dxActual = dxTheoretical * ratio;
-		long dyActual = dyTheoretical * ratio;
-		x = lastX + dxActual;
-		y = lastY + dyActual;
+		
+		double dx = Math.cos(curAngle) * distance;
+		double dy = Math.sin(curAngle) * distance;
+		
+		x += dx;
+		y += dx;
 	}
 
 	private double calcAngleTo(double dx, double dy) {
@@ -100,13 +107,8 @@ public class Navigator {
 		return (-Math.atan2(dx, dy) * 180 / Math.PI) - curAngle;
 	}
 
-	private long calcDistanceTo(long dx, long dy) {
-		return (long) Math.sqrt(dx * dx + dy * dy);
-	}
-	
-	public void travel(long distance) {
-		pilot.travel(distance);
-		//add ability to calc new coords.
+	private double calcDistanceTo(double dx, double dy) {
+		return Math.sqrt(dx * dx + dy * dy);
 	}
 	
 	public boolean listeningToMapper() {
@@ -123,7 +125,7 @@ public class Navigator {
 	 * This could potentially be fixed, but I don't see a reason
 	 * for it at this time.
 	 */
-	public long getX() {
+	public double getX() {
 		return x;
 	}
 	
@@ -133,7 +135,7 @@ public class Navigator {
 	 * This could potentially be fixed, but I don't see a reason
 	 * for it at this time.
 	 */
-	public long getY() {
+	public double getY() {
 		return y;
 	}
 	
