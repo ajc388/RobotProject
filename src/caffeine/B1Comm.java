@@ -1,3 +1,4 @@
+package caffeine;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -14,7 +15,7 @@ import lejos.nxt.comm.NXTConnection;
 
 Request for current coordinates (code)
  */
-public class B1Comm {
+public class B1Comm implements Runnable {
 	private CageController cage;
 	private ObjectVerifier obj;
 	private DataOutputStream dos;
@@ -29,18 +30,8 @@ public class B1Comm {
 		dos = connection.openDataOutputStream();
 		dis = connection.openDataInputStream();
 		connected = true;
-	}
-	
-	public void setMapper(Mapper map) {
-		this.map = map;
-	}
-	
-	public void setObjectVerifier(ObjectVerifier obj) {
-		this.obj = obj;
-	}
-	
-	public void setCageController(CageController cage) {
-		this.cage = cage;
+		new Thread(this).start();
+		run();
 	}
 
 	public void notifyLineDetected(){
@@ -67,6 +58,7 @@ public class B1Comm {
 			dos.writeByte(4);
 			dos.writeLong(x);
 			dos.writeLong(y);
+			dos.flush();
 		} catch (IOException e) {
 		}
 	}
@@ -79,6 +71,7 @@ public class B1Comm {
 		}
 	}
 	public void requestCoordinates(){
+		
 		try {
 			dos.writeByte(6);
 		} catch (IOException e) {
@@ -93,8 +86,8 @@ public class B1Comm {
 				switch (b) {
 				case 7: transmitColor(obj.isItRed()); break;
 				case 8: cage.lowerCage(); break;
-				//case 9: map.getNewNav(); break;
-				//case 10: map.notifyCoordinates(dis.readLong(), dis.readLong()); break;
+				case 9: map.getNewNav(); break;
+				case 10: map.notifyCoordinates(dis.readLong(), dis.readLong()); break;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

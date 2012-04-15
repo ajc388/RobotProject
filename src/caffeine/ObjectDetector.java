@@ -1,3 +1,4 @@
+import lejos.nxt.LCD;
 import lejos.nxt.UltrasonicSensor;
 
 /*
@@ -62,7 +63,11 @@ public class ObjectDetector implements Runnable{
 	private void notifyRight (int dist){
 		stopScanning();
 		nav.toggleListenToMapper(false);
+		try{
 		Thread.sleep(1000);// TODO: Make this more precise later!
+		} catch (Exception e){
+			LCD.drawString("Fuck your good practices, Georgas", 0, 0);
+		}
 		int d1 = US2.getDistance();
 		nav.travel(10);
 		int d2 = US2.getDistance();

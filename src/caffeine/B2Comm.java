@@ -1,3 +1,4 @@
+package caffeine;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -49,6 +50,7 @@ public class B2Comm implements Runnable{
 		connected = true;
 		dis = btc.openDataInputStream();
 		dos = btc.openDataOutputStream();
+		run();
 	}
 
 	public void setNavigator(Navigator nav){
@@ -100,8 +102,8 @@ public class B2Comm implements Runnable{
 				byte b = dis.readByte();
 				switch (b) {
 				case 1: nav.emergencyStop(); break;
-				case 2: od.notifyBallColor(false); break;
-				case 3: od.notifyBallColor(true); break; //Check what else needs to happen here
+				case 2: od.notifyBallColor(true); break;
+				case 3: od.notifyBallColor(false); break; //Check what else needs to happen here
 				case 4: nav.navigateTo(dis.readLong(), dis.readLong()); break;
 				case 5: nav.travel(6); break;
 				case 6: sendCoordinates(); break;
