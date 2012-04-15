@@ -1,10 +1,15 @@
+import lejos.nxt.LCD;
+import lejos.nxt.MotorPort;
+import lejos.nxt.NXTRegulatedMotor;
+
 public class Robot1 {
 
 
 	private static NXTRegulatedMotor cageMotor;
-//	private static Mapper mapper;
+	private static Mapper mapper;
 	private static CageController cageController;
 	private static ObjectVerifier objectVerifier;
+	private static ObjectDetector objectDetector;
 
 	private static B1Comm b1;
 
@@ -16,9 +21,6 @@ public class Robot1 {
 		//mapper = new Mapper();
 		cageController = new CageController(cageMotor);
 
-		b1.setCageController(cageController);
-		//b1.setMapper(mapper);
-		b1.setObjectVerifier(objectVerifier);
 		new Thread(b1).start();
 		
 		try{
