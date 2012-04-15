@@ -115,6 +115,10 @@ public class Navigator {
 		return listenToMapper;
 	}
 	
+	public boolean isTravelling() {
+		return pilot.isTraveling();
+	}
+	
 	public void toggleListenToMapper(boolean listenToMapper) {
 		this.listenToMapper = listenToMapper;
 	}
@@ -145,16 +149,21 @@ public class Navigator {
 	
 	public static void main(String[] args) {
 		Button.ENTER.waitForPress();
-		CompassSensor compass = new CompassSensor(SensorPort.S4);
+		CompassSensor compass = new CompassSensor(SensorPort.S3);
 		CompassPilot pilot = new CompassPilot(compass, 2.9255357f, 16.19250f, Motor.A, Motor.B);
 		pilot.setTravelSpeed(20.0f);
 		pilot.setRotateSpeed(20.0f);
 		Navigator nav = new Navigator(compass, pilot);
 
-		nav.navigateTo(5, 0);
-		nav.navigateTo(5, 5);
-		nav.navigateTo(-5, 5);
+		nav.travel(50);
+		try {
+			Thread.sleep(6000);
+		} catch (InterruptedException e) {
+			
+		}
+		nav.emergencyStop();
 		nav.navigateBackToZero();
+		Button.ENTER.waitForPress();
 	}
 	
 	
