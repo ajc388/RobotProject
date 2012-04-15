@@ -53,17 +53,6 @@ public class ObjectDetector{
 		}
 	}
 
-
-
-
-	/*			int d2 = US2.getDistance();
-			int deltaX = (d1*d1+100-(d2*d2))/20;
-			int deltaY = (int)(Math.sqrt((double)(d1*d1-deltaX*deltaX)));
-			int Xn = (int)(nav.getX() + 9 + deltaX);
-			int Yn = (int)(nav.getY() - 4.5 + deltaY);
-			nav.navigateTo(Xn, Yn);
-			listenRight = true;*/
-
 	public void processLeft(int dist) {
 		if (listening){//We are listening for a new object detected
 			//We're not waiting for new input, so start
