@@ -23,14 +23,16 @@ public class Robot1 {
 
 		new Thread(b1).start();
 		
-		try{
-		b1.transmitNavCommand(0, 10);
-		Thread.sleep(2000);
-		b1.transmitNavCommand(0, 20);
-		Thread.sleep(2000);
-		b1.transmitNavCommand(0, 30);
-		Thread.sleep(2000);
-		b1.transmitNavCommand(0, 40);
-		} catch (Exception e){}
+		/*
+		 * While red ball is not found:
+		 * 	If ObjectDetector not examining an object
+		 * 		Ask mapper for new coordinates to explore
+		 * 			while navigator is travelling or investigating a ball 
+		 * 				Sleep for 100 ms
+		 * 			If we found red, continue loop
+		 * 			Explore those coordinates
+		 * 			
+		 * Go home
+		 */
 	}
 }
