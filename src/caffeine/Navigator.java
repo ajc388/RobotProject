@@ -137,6 +137,10 @@ public class Navigator {
 		return y;
 	}
 	
+	public double getAngle() {
+		return curAngle;
+	}
+	
 	public static void main(String[] args) {
 		Button.ENTER.waitForPress();
 		CompassSensor compass = new CompassSensor(SensorPort.S4);
