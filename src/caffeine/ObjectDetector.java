@@ -73,7 +73,7 @@ public class ObjectDetector{
 			double deltaY = Math.sqrt((dist1*dist1) - (deltaX*deltaX));
 			double DELTAX = deltaX + XOFFSET;
 			double DELTAY = deltaY + YOFFSET; //Make this addition for other side
-			int heading = nav.getAngle();
+			double heading = nav.getAngle();
 			double deltaXT = DELTAX*cosD(heading) - DELTAY*sinD(heading);
 			double deltaYT = DELTAX*sinD(heading) + DELTAY*cosD(heading);
 			nav.navigateTo((long)(nav.getX()+deltaXT), (long)(nav.getY()+deltaYT));
@@ -84,10 +84,10 @@ public class ObjectDetector{
 		}
 	}
 	
-	private double cosD(int angle){
+	private double cosD(double angle){
 		return Math.cos(Math.PI/180*angle);
 	}
-	private double sinD(int angle){
+	private double sinD(double angle){
 		return Math.sin(Math.PI/180*angle);
 	}
 }
