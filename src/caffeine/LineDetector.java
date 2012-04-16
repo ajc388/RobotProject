@@ -21,12 +21,12 @@ public class LineDetector implements Runnable {
 	public void notifyMapper()
 	{
 		//Notify the Mapper
-		map.updateBoundary(nav.getX(), nav.getY());
+		//map.updateBoundary(nav.getX(), nav.getY());
 		//Notify the Navigator
 		nav.emergencyStop();
 		nav.rotate(180);
 		nav.travel(5);
-		map.updatePosition(nav.getX(), nav.getY() );
+		//map.updatePosition(nav.getX(), nav.getY() );
 	}
 	
 	public void run()
