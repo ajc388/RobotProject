@@ -1,7 +1,9 @@
+import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.MotorPort;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
+import lejos.nxt.addon.ColorSensorHT;
 import lejos.nxt.addon.CompassSensor;
 import lejos.robotics.navigation.CompassPilot;
 
@@ -33,10 +35,13 @@ public class Robot1 {
 		//Build all robot classes
 		b1 = new B1Comm();
 		pilot = new CompassPilot(compass, 2.3867536f, 16.19250f, leftMotor, rightMotor);
+		pilot.setTravelSpeed(20.0f);
+		pilot.setRotateSpeed(20.0f);
+		pilot.setAcceleration(150);
 		nav = new Navigator(compass, pilot, leftMotor, rightMotor);
 		objectVerifier = new ObjectVerifier(colorSense);
 		objectDetector = new ObjectDetector(nav);
-		mapper = new Mapper();
+		//mapper = new Mapper();
 		lineDetector = new LineDetector(nav, mapper);
 		cageController = new CageController(cageMotor);
 		
@@ -45,7 +50,7 @@ public class Robot1 {
 		
 		LCD.drawString("Got here", 1, 0);
 		
-		
+		Button.ENTER.waitForPressAndRelease();
 		
 		
 

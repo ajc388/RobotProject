@@ -32,7 +32,11 @@ public class ObjectDetector{
 			listening = false;
 			nav.toggleListenToMapper(false);//Make the navigator stop listening to the mapper
 			while (nav.isTraveling()){
-				Thread.sleep(100); //Wait for it to stop moving
+				try {
+					Thread.sleep(100); //Wait for it to stop moving
+				} catch (InterruptedException e) {
+					
+				}
 			}
 			waitingOnFirstRight = true;
 		} else 	if (waitingOnFirstRight){
@@ -59,7 +63,11 @@ public class ObjectDetector{
 			listening = false;
 			nav.toggleListenToMapper(false);//Make the navigator stop listening to the mapper
 			while (nav.isTraveling()){
-				Thread.sleep(100); //Wait for it to stop moving
+				try {
+					Thread.sleep(100); //Wait for it to stop moving
+				} catch (InterruptedException e) {
+					
+				}
 			}
 			waitingOnFirstLeft = true;
 		} else 	if (waitingOnFirstLeft){
