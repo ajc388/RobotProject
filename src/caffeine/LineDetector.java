@@ -34,7 +34,7 @@ public class LineDetector implements Runnable {
 		//Starts sensing for line.
 		while(true)
 		{
-			if(ls.getLightValue() <= ls.getHigh()-20 && ls.getLightValue() > ls.getLow()+40)
+			if(ls.getLightValue() > 80)
 			{
 				notifyMapper();
 			}
