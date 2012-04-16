@@ -108,7 +108,7 @@ public class Navigator {
 	 */
 	public void emergencyStop() {
 		double distance = pilot.getMovementIncrement();
-		pilot.setAcceleration(10000);
+		pilot.setAcceleration(100000);
 		pilot.stop(); // API shows method quickStop() but it doesn't seem to be included. Use stop() for now.
 		pilot.setAcceleration(150);
 		double dx = Math.cos(Math.toRadians(curAngle)) * distance;
@@ -116,6 +116,8 @@ public class Navigator {
 		
 		x = lastX + dx;
 		y = lastY + dy;
+		
+		travel(0);
 	}
 
 	private double calcAngleTo(double dx, double dy) {
@@ -163,7 +165,7 @@ public class Navigator {
 		return curAngle;
 	}
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		Button.ENTER.waitForPress();
 		
 		NXTRegulatedMotor leftMotor = new NXTRegulatedMotor(MotorPort.A);
@@ -250,8 +252,8 @@ public class Navigator {
 		nav.travel(2.54);
 		Button.ENTER.waitForPress();
 		nav.travel(2.54);
-		Button.ENTER.waitForPress();*/
-	}
+		Button.ENTER.waitForPress();
+	}*/
 	
 	
 //Steffen, just put the code you already made in here

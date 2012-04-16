@@ -17,11 +17,11 @@ public class LineDetector implements Runnable {
 		while(true)  {
 			if(ls.getLightValue() > 88)
 			{
-			    try {
-				Thread.sleep(500);
 				nav.emergencyStop();
+			    try {
 				nav.rotate(180);
 				nav.travel(10);
+				Thread.sleep(1000);
 			    } catch (InterruptedException e) {
 				nav.travel(20);
 			    }

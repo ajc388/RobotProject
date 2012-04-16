@@ -56,7 +56,7 @@ public class Robot1 {
 		objectVerifier = new ObjectVerifier(colorSense);
 		objectDetector = new ObjectDetector(nav);
 		//mapper = new Mapper();
-		lineDetector = new LineDetector(lightSensor, nav, mapper);
+		lineDetector = new LineDetector(lightSensor, nav);
 		cageController = new CageController(cageMotor);
 		
 		
@@ -83,7 +83,7 @@ public class Robot1 {
 		 * Go home
 		 */
 		
-		nav.travel(2000);
+		nav.travel(50);
 		while (nav.isTraveling()) {
 		    try {
 			Thread.sleep(100);
