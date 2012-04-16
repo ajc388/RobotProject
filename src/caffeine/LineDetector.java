@@ -11,7 +11,7 @@ public class LineDetector implements Runnable {
 		ls = new LightSensor2(SensorPort.S1);
 		ls.loadCalibration();
 		ls.setFloodlight(true);
-		new Thread().start();
+		new Thread(this).start();
 	}
     	
 	public void notifyMapper()
@@ -30,7 +30,7 @@ public class LineDetector implements Runnable {
 		//Starts sensing for line.
 		while(true)
 		{
-			if(ls.getLightValue() <= ls.getHigh() && ls.getLightValue() > ls.getLow()+10)
+			if(ls.getLightValue() <= ls.getHigh()-20 && ls.getLightValue() > ls.getLow()+40)
 			{
 				notifyMapper();
 			}
