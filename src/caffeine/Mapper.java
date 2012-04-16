@@ -1,35 +1,30 @@
-import java.util.Stack;
-
 import lejos.nxt.LCD;
-
 /*
  * This is the mapper, which resides on caffeine
  * The mapper needs to:
  * Tell navigator where to go next
  * Plot path back to start when red ball is captured
- * 
  */
 public class Mapper {
-	private B1Comm commRef;
-
+	//private B1Comm commRef;
 	private static enum mapObject {
 		UNVISITED_LOCATION, SCANNED_LOCATION, BORDER, STARTING_POINT, STARTING_BORDER, BLUE_BALL, RED_BALL
 	}
 
 	private static mapObject[][] map;
-	private static final int mapSize = 500; // Units
+	private static final int mapSize = 200; // Units
 	private static final int mapIncrement = 5; // Units in centimeters
 
 	// Robot position
-	private long xRobotPosition;
-	private long yRobotPosition;
-	private final long xStartPosition;
-	private final long yStartPosition;
+	private double xRobotPosition;
+	private double yRobotPosition;
+	private final double xStartPosition;
+	private final double yStartPosition;
 
 	// Builds the map object based upon the constants mapsize
 	// issues order to navigate forward
-	public Mapper(B1Comm pComm) {
-		commRef = pComm;
+	public Mapper() {
+	//	commRef = pComm;
 		map = new mapObject[mapSize][mapSize];
 
 		// Instantiate every point on the field as an empty object
@@ -61,25 +56,25 @@ public class Mapper {
 					+ j] = mapObject.STARTING_BORDER;
 		}
 		// Start by asking the motor to move forward 20cm
-		commRef.transmitNavCommand(goToX(xRobotPosition),
-				goToY(yRobotPosition + 5));
+	//	commRef.transmitNavCommand(goToX(xRobotPosition),
+	//			goToY(yRobotPosition + 5));
 	}
 
 	// ==============================================\\
 	// MOVEMENT COMMANDS \\
 	// ==============================================\\
 	// GoTo Command
-	public long goToX(long x) {
-		return convertToNavCoordinates(x);
+	public double goToX(int x) {
+		return (double)convertToNavCoordinates(x);
 	}
 
-	public long goToY(long y) {
-		return convertToNavCoordinates(y);
+	public double goToY(int y) {
+		return (double)convertToNavCoordinates(y);
 	}
 
 	/* Tell the robot to go back home at 0,0 */
 	public void returnHome() {
-		commRef.transmitNavCommand(0, 0);
+	//	commRef.transmitNavCommand(0, 0);
 	}
 
 	// Exploration algorithm
@@ -121,7 +116,7 @@ public class Mapper {
 				for (int j = lowerBoundY; j < searchIncrement && j < mapSize; j++) {
 					if (map[i][j] == mapObject.UNVISITED_LOCATION) {
 						// send data
-						commRef.transmitNavCommand(goToX(i), goToY(j));
+						//commRef.transmitNavCommand(goToX(i), goToY(j));
 						break;
 					}
 				}
@@ -134,15 +129,15 @@ public class Mapper {
 
 	// UPDATE MAP COMMANDS
 	// Should also mark the position of scanned regions on the field
-	public void updatePosition(long x, long y) {
+	public void updatePosition(double x, double y) {
 		int sensorRange = 40; // in centimeters
 		// Update position coordinates
 		xRobotPosition = x;
 		yRobotPosition = y;
 
 		// Get adjusted map coordinates
-		int mapX = convertToMapCoordinates(x);
-		int mapY = convertToMapCoordinates(y);
+		int mapX = (int) convertToMapCoordinates(x);
+		int mapY = (int) convertToMapCoordinates(y);
 
 		// Loop positions
 		int leftPosition = (int) (mapX - (sensorRange / mapIncrement));
@@ -160,31 +155,31 @@ public class Mapper {
 	}
 
 	// Also updates position
-	public void updateBoundary(long x, long y) {
+	public void updateBoundary(double x, double y) {
 		xRobotPosition = x;
 		yRobotPosition = y;
 		map[convertToMapCoordinates(x)][convertToMapCoordinates(y)] = mapObject.BORDER;
 	}
 
 	// robot position does not change
-	public void updateBlueBall(long x, long y) {
+	public void updateBlueBall(int x, int y) {
 		map[convertToMapCoordinates(x)][convertToMapCoordinates(y)] = mapObject.BLUE_BALL;
 	}
 
 	// Converts to valid coordinates to and from
 	// The navigator coordinate system
-	private int convertToMapCoordinates(long coordinate) {
+	private int convertToMapCoordinates(double coordinate) {
 		return (int) ((coordinate / mapIncrement) + (mapSize / 2));
 	}
 
-	private long convertToNavCoordinates(long arrayCoordinate) {
-		return (long) ((arrayCoordinate - (mapSize / 2)) * mapIncrement);
+	private double convertToNavCoordinates(int arrayCoordinate) {
+		return (double) ((arrayCoordinate - (mapSize / 2)) * mapIncrement);
 	}
 
 	// If the location is a border or a blue ball then it is not passable
 	// otherwise the location is good
-	public boolean isPassable(long x, long y) {
-		if (map[(int) x][(int) y] == mapObject.BORDER) {
+	public boolean isPassable(int x, int y) {
+		if (map[x][y] == mapObject.BORDER) {
 			return false;
 		} else if (map[(int) x][(int) y] == mapObject.BLUE_BALL) {
 			return false;
@@ -194,21 +189,10 @@ public class Mapper {
 	}
 
 	// GETTERS
-	public double getXRobotPosition() {
-		return xRobotPosition;
-	}
-
-	public double getYRobotPosition() {
-		return yRobotPosition;
-	}
-
-	public double getXStartPosition() {
-		return xStartPosition;
-	}
-
-	public double getYStartPosition() {
-		return yStartPosition;
-	}
+	public double getXRobotPosition() {return xRobotPosition;}
+	public double getYRobotPosition() {return yRobotPosition;}
+	public double getXStartPosition() {return xStartPosition;}
+	public double getYStartPosition() {return yStartPosition;}
 
 	// Printout map
 	public String toString() {

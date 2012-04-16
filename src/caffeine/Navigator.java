@@ -27,15 +27,21 @@ public class Navigator {
 	
 	/** Boolean flag to decide what to listen to */
 	private boolean listenToMapper;
+	
+	/** Motors */
+	NXTRegulatedMotor leftMotor, rightMotor;
 
 	/**
 	 * Constructor
 	 * @param compass - takes a compass so we can abstract away from port selection
 	 * @param pilot - takes a pilot so we can set that up elsewhere
 	 */
-	public Navigator(CompassSensor compass, CompassPilot pilot) {
+	public Navigator(CompassSensor compass, CompassPilot pilot, NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
 		this.compass = compass;
 		this.pilot = pilot;
+		
+		this.leftMotor = leftMotor;
+		this.rightMotor = rightMotor;
 
 		listenToMapper = true;
 		
@@ -126,7 +132,7 @@ public class Navigator {
 	}
 	
 	public boolean isTraveling() {
-		return Motor.A.isMoving() || Motor.B.isMoving();
+		return leftMotor.isMoving() || rightMotor.isMoving();
 	}
 	
 	public void toggleListenToMapper(boolean listenToMapper) {
@@ -168,11 +174,11 @@ public class Navigator {
 		pilot.setTravelSpeed(20.0f);
 		pilot.setRotateSpeed(20.0f);
 		pilot.setAcceleration(150);
-		Navigator nav = new Navigator(compass, pilot);
+		Navigator nav = new Navigator(compass, pilot, leftMotor, rightMotor);
 
 		nav.navigateTo(40.0, 40.0);
 		LCD.drawString("Traveling: " + nav.isTraveling(), 0, 1);
-		while (leftMotor.isMoving() || rightMotor.isMoving()) {
+		while (nav.isTraveling()) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -180,7 +186,7 @@ public class Navigator {
 			}
 		}
 		nav.navigateTo(-40.0, 40.0);
-		while (leftMotor.isMoving() || rightMotor.isMoving()) {
+		while (nav.isTraveling()) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
