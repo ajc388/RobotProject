@@ -5,10 +5,14 @@ public class LineDetector implements Runnable {
 	private Navigator nav;
 	private Mapper map;
 	
-    	public LineDetector(Navigator nav, Mapper map){
+	public LineDetector( ) {
+	    
+	}
+	
+    	public LineDetector(LightSensor2 ls, Navigator nav, Mapper map){
 		this.map = map;
 		this.nav = nav;
-		ls = new LightSensor2(SensorPort.S1);
+		this.ls = ls;
 		ls.loadCalibration();
 		ls.setFloodlight(true);
 		new Thread(this).start();

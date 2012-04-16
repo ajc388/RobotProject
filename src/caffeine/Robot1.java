@@ -21,6 +21,7 @@ public class Robot1 {
 	private static ColorSensorHT colorSense;
 	private static LineDetector lineDetector;
 	private static B1Comm b1;
+	private static LightSensor2 lightSensor;
 	
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
@@ -31,7 +32,20 @@ public class Robot1 {
 		//Instantiate snesors
 		compass = new CompassSensor(SensorPort.S3);
 		colorSense = new ColorSensorHT(SensorPort.S2);
-			
+		lightSensor = new LightSensor2(SensorPort.S1 );	
+	
+		//Calibrate sensor
+		LCD.drawString( "Place on carpet", 0 , 1) ;
+		Button.ENTER.waitForPressAndRelease();
+		lightSensor.calibrateLow();
+		
+		LCD.drawString( "Place on line", 0 , 2) ;
+		Button.ENTER.waitForPressAndRelease();
+		lightSensor.calibrateHigh();
+		
+		LCD.clear();
+		lightSensor.saveCalibration();
+		
 		//Build all robot classes
 		b1 = new B1Comm();
 		pilot = new CompassPilot(compass, 2.3867536f, 16.19250f, leftMotor, rightMotor);
@@ -42,8 +56,9 @@ public class Robot1 {
 		objectVerifier = new ObjectVerifier(colorSense);
 		objectDetector = new ObjectDetector(nav);
 		//mapper = new Mapper();
-		lineDetector = new LineDetector(nav, mapper);
+		lineDetector = new LineDetector(lightSensor, nav, mapper);
 		cageController = new CageController(cageMotor);
+		
 		
 		//Establish connections to other created objects
 		b1.setObjectDetector(objectDetector);
