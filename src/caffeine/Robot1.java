@@ -16,24 +16,37 @@ public class Robot1 {
 	private static CompassSensor compass;
 	private static ObjectVerifier objectVerifier;
 	private static ObjectDetector objectDetector;
-
+	private static ColorSensorHT colorSense;
+	private static LineDetector lineDetector;
 	private static B1Comm b1;
-
+	
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
-		b1 = new B1Comm();
-		LCD.drawString("Got here", 1, 0);
-		cageMotor = new NXTRegulatedMotor(MotorPort.C);
+	    	//Instantiate motors
+	    	cageMotor = new NXTRegulatedMotor(MotorPort.C);
 		leftMotor = new NXTRegulatedMotor(MotorPort.A);
 		rightMotor = new NXTRegulatedMotor(MotorPort.B);
-		
+		//Instantiate snesors
 		compass = new CompassSensor(SensorPort.S3);
+		colorSense = new ColorSensorHT(SensorPort.S2);
+			
+		//Build all robot classes
+		b1 = new B1Comm();
 		pilot = new CompassPilot(compass, 2.3867536f, 16.19250f, leftMotor, rightMotor);
-		
 		nav = new Navigator(compass, pilot, leftMotor, rightMotor);
-
-		//mapper = new Mapper();
+		objectVerifier = new ObjectVerifier(colorSense);
+		objectDetector = new ObjectDetector(nav);
+		mapper = new Mapper();
+		lineDetector = new LineDetector(nav, mapper);
 		cageController = new CageController(cageMotor);
+		
+		//Establish connections to other created objects
+		b1.setObjectDetector(objectDetector);
+		
+		LCD.drawString("Got here", 1, 0);
+		
+		
+		
 		
 
 		new Thread(b1).start();
@@ -49,5 +62,14 @@ public class Robot1 {
 		 * 			
 		 * Go home
 		 */
+		
+		nav.travel(2000);
+		while (nav.isTraveling()) {
+		    try {
+			Thread.sleep(100);
+		    } catch (InterruptedException e) {
+			
+		    }
+		}
 	}
 }

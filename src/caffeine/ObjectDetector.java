@@ -31,7 +31,7 @@ public class ObjectDetector{
 			//We're not waiting for new input, so start
 			listening = false;
 			nav.toggleListenToMapper(false);//Make the navigator stop listening to the mapper
-			while (nav.isTravelling()){
+			while (nav.isTraveling()){
 				Thread.sleep(100); //Wait for it to stop moving
 			}
 			waitingOnFirstRight = true;
@@ -58,7 +58,7 @@ public class ObjectDetector{
 			//We're not waiting for new input, so start
 			listening = false;
 			nav.toggleListenToMapper(false);//Make the navigator stop listening to the mapper
-			while (nav.isTravelling()){
+			while (nav.isTraveling()){
 				Thread.sleep(100); //Wait for it to stop moving
 			}
 			waitingOnFirstLeft = true;
