@@ -1,84 +1,93 @@
-import lejos.nxt.LCD;
-import lejos.nxt.UltrasonicSensor;
+
 
 /*
  * Object detector residing on caffeine2
  */
-public class ObjectDetector implements Runnable{
-	//Add arraylist later
-	private boolean running;
-	Navigator nav;
-	UltrasonicSensor US1, US2, US3; //Front, Left, and Right
-	public ObjectDetector(UltrasonicSensor US1, UltrasonicSensor US2, UltrasonicSensor US3, Navigator nav){
+public class ObjectDetector{
+	//Add ArrayList later for detected objects
+	private boolean listening, waitingOnFirstRight, waitingOnFirstLeft, waitingOnSecondRight, waitingOnSecondLeft;
+	//Toggles whether we're listening to each and if we're on the first one
+	private Navigator nav;
+	private static final int MOVEDIST = 10;
+	private static final int MOVEDISTSQ = 100;
+	private static final double XOFFSET = 4.5;
+	private static final double YOFFSET = 9.0;
+	private int dist1, dist2;
+	public ObjectDetector(Navigator nav){
 		//Initialize list of found blue balls to ignore
 		//Initialize the three sensors, start a thread that queries them repeatedly
-		this.US1 = US1;
-		this.US2 = US2;
-		this.US3 = US3;
+		listening = true;
+		waitingOnFirstRight = false;
+		waitingOnFirstLeft = true;
 		this.nav = nav;
-		running = true;
-	}
-	public void stopScanning(){
-		running = false;
-		//When red ball is found, don't need to find it any more!
 	}
 
-
-
-	public void notifyBallColor(boolean wasRed){
-
-		//wasRed tells whether the ball that was navigated to was red or not.
-		//If blue, add to list of blue balls to ignore for detection purposes
-	}
-	public void notifyCageIsUp(){
-		//Lets it know it can move forward to capture
-	}
-	public void notifyCaptureReady(){
-		//Lets it know it can capture
-	}
-	public void notifyCageIsBackDown(){
-		//Cage is down, we have captured ball, tell mapper to go home
+	public void processFront (int dist){
+		//TODO: All this shit! Turn and call right or left
 	}
 
-	public void run() {
-		while (running){
-			int	d1 = US1.getDistance();
-			int d2 = US2.getDistance();
-			int d3 = US3.getDistance();
-			if (d1<50){
-				notifyFront(d1);
+	public void processRight (int dist){
+		if (listening){//We are listening for a new object detected
+			//We're not waiting for new input, so start
+			listening = false;
+			nav.toggleListenToMapper(false);//Make the navigator stop listening to the mapper
+			while (nav.isTravelling()){
+				Thread.sleep(100); //Wait for it to stop moving
 			}
-			if (d2<50){
-				notifyRight(d2);
-			}
-			if (d3<50){
-				notifyLeft(d3);
-			}
+			waitingOnFirstRight = true;
+		} else 	if (waitingOnFirstRight){
+			dist1 = dist;
+			waitingOnFirstRight = false;
+			waitingOnSecondRight = true;
+		} else if (waitingOnSecondRight){
+			dist2 = dist;
+			//Do the processing here
+			double deltaX = (double) ((dist2*dist2) - (dist1*dist1)-MOVEDISTSQ);
+			double deltaY = Math.sqrt((dist1*dist1) - (deltaX*deltaX));
+			double DELTAX = deltaX + XOFFSET;
+			double DELTAY = deltaY - YOFFSET; //Make this addition for other side
+			//if it's red, head home
+			//if it's blue, then:
+			waitingOnSecondRight = false;
+			listening = true;
 		}
 	}
 
-	private void notifyFront (int dist){
-		
-	}
-	private void notifyRight (int dist){
-		stopScanning();
-		nav.toggleListenToMapper(false);
-		try{
-		Thread.sleep(1000);// TODO: Make this more precise later!
-		} catch (Exception e){
-			LCD.drawString("Fuck your good practices, Georgas", 0, 0);
+	public void processLeft(int dist) {
+		if (listening){//We are listening for a new object detected
+			//We're not waiting for new input, so start
+			listening = false;
+			nav.toggleListenToMapper(false);//Make the navigator stop listening to the mapper
+			while (nav.isTravelling()){
+				Thread.sleep(100); //Wait for it to stop moving
+			}
+			waitingOnFirstLeft = true;
+		} else 	if (waitingOnFirstLeft){
+			dist1 = dist;
+			waitingOnFirstLeft = false;
+			waitingOnSecondLeft = true;
+		} else if (waitingOnSecondLeft){
+			dist2 = dist;
+			//Do the processing here
+			double deltaX = (double) ((dist2*dist2) - (dist1*dist1)-MOVEDISTSQ);
+			double deltaY = Math.sqrt((dist1*dist1) - (deltaX*deltaX));
+			double DELTAX = deltaX + XOFFSET;
+			double DELTAY = deltaY + YOFFSET; //Make this addition for other side
+			double heading = nav.getAngle();
+			double deltaXT = DELTAX*cosD(heading) - DELTAY*sinD(heading);
+			double deltaYT = DELTAX*sinD(heading) + DELTAY*cosD(heading);
+			nav.navigateTo((long)(nav.getX()+deltaXT), (long)(nav.getY()+deltaYT));
+			//if it's red, head home
+			//if it's blue, then:
+			waitingOnSecondLeft = false;
+			listening = true;
 		}
-		int d1 = US2.getDistance();
-		nav.travel(10);
-		int d2 = US2.getDistance();
-		int deltaX = (d1*d1+100-(d2*d2))/20;
-		int deltaY = (int)(Math.sqrt((double)(d1*d1-deltaX*deltaX)));
-		int Xn = (int)(nav.getX() + 9 + deltaX);
-		int Yn = (int)(nav.getY() - 4.5 + deltaY);
-		nav.navigateTo(Xn, Yn);
-		
 	}
-	private void notifyLeft (int dist){
-		
+	
+	private double cosD(double angle){
+		return Math.cos(Math.PI/180*angle);
+	}
+	private double sinD(double angle){
+		return Math.sin(Math.PI/180*angle);
 	}
 }
