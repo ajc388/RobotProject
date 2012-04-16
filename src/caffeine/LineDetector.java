@@ -9,7 +9,6 @@ public class LineDetector implements Runnable {
 		this.ls = ls;
 		ls.loadCalibration();
 		ls.setFloodlight(true);
-		new Thread(this).start();
 	}
     	
 	public void run()  {

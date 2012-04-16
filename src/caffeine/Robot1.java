@@ -25,8 +25,8 @@ public class Robot1 {
 	
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
-	    	//Instantiate motors
-	    	cageMotor = new NXTRegulatedMotor(MotorPort.C);
+	    //Instantiate motors
+	    cageMotor = new NXTRegulatedMotor(MotorPort.C);
 		leftMotor = new NXTRegulatedMotor(MotorPort.A);
 		rightMotor = new NXTRegulatedMotor(MotorPort.B);
 		//Instantiate snesors
@@ -35,7 +35,7 @@ public class Robot1 {
 		lightSensor = new LightSensor2(SensorPort.S1 );	
 	
 		//Calibrate sensor
-		LCD.drawString( "Place on carpet", 0 , 1) ;
+		/*LCD.drawString( "Place on carpet", 0 , 1) ;
 		Button.ENTER.waitForPressAndRelease();
 		lightSensor.calibrateLow();
 		
@@ -44,7 +44,7 @@ public class Robot1 {
 		lightSensor.calibrateHigh();
 		
 		LCD.clear();
-		lightSensor.saveCalibration();
+		lightSensor.saveCalibration();*/
 		
 		//Build all robot classes
 		b1 = new B1Comm();
@@ -67,9 +67,11 @@ public class Robot1 {
 		
 		Button.ENTER.waitForPressAndRelease();
 		
+		//Startup sequence should go here. Leave the start boundaries 
+		//before starting the object and line detecting.
 		
-
-		new Thread(b1).start();
+		new Thread(lineDetector).start();
+		//new Thread(b1).start();
 		
 		/*
 		 * While red ball is not found:
