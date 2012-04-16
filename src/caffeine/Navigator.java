@@ -1,9 +1,11 @@
+import lejos.nxt.Button;
+import lejos.nxt.LCD;
+import lejos.nxt.Motor;
+import lejos.nxt.MotorPort;
+import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.SensorPort;
 import lejos.nxt.addon.CompassSensor;
 import lejos.robotics.navigation.CompassPilot;
-import java.lang.Math;
-import lejos.nxt.Button;
-import lejos.nxt.SensorPort;
-import lejos.nxt.Motor;
 
 @SuppressWarnings("deprecation")
 public class Navigator {
@@ -16,6 +18,7 @@ public class Navigator {
 
 	private CompassSensor compass;
 	private CompassPilot pilot;
+	//private DifferentialPilot pilot;
 
 	/** Simple representation of a point */
 	private double lastX, lastY;
@@ -65,14 +68,20 @@ public class Navigator {
 	
 	public void travel(double distance) {
 		pilot.travel(distance, true);
-		double dx = Math.cos(curAngle) * distance;
-		double dy = Math.sin(curAngle) * distance;
+		double dx = Math.cos(Math.toRadians(curAngle)) * distance;
+		double dy = Math.sin(Math.toRadians(curAngle)) * distance;
 		
 		lastX = x;
 		lastY = y;
 		
 		x += dx;
-		y += dx;
+		y += dy;
+		
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			
+		}
 	}
 	
 	public void rotate(double angle) {
@@ -93,18 +102,19 @@ public class Navigator {
 	 */
 	public void emergencyStop() {
 		double distance = pilot.getMovementIncrement();
+		pilot.setAcceleration(10000);
 		pilot.stop(); // API shows method quickStop() but it doesn't seem to be included. Use stop() for now.
+		pilot.setAcceleration(150);
+		double dx = Math.cos(Math.toRadians(curAngle)) * distance;
+		double dy = Math.sin(Math.toRadians(curAngle)) * distance;
 		
-		double dx = Math.cos(curAngle) * distance;
-		double dy = Math.sin(curAngle) * distance;
-		
-		x += dx;
-		y += dx;
+		x = lastX + dx;
+		y = lastY + dy;
 	}
 
 	private double calcAngleTo(double dx, double dy) {
 		//This is bad, but should work, it just won't always make the shortest turn at the moment.
-		return (-Math.atan2(dx, dy) * 180 / Math.PI) - curAngle;
+		return (-Math.atan2(dx, dy) * 180 / Math.PI) - curAngle + 90;
 	}
 
 	private double calcDistanceTo(double dx, double dy) {
@@ -115,8 +125,8 @@ public class Navigator {
 		return listenToMapper;
 	}
 	
-	public boolean isTravelling() {
-		return pilot.isTraveling();
+	public boolean isTraveling() {
+		return Motor.A.isMoving() || Motor.B.isMoving();
 	}
 	
 	public void toggleListenToMapper(boolean listenToMapper) {
@@ -149,21 +159,92 @@ public class Navigator {
 	
 	public static void main(String[] args) {
 		Button.ENTER.waitForPress();
+		
+		NXTRegulatedMotor leftMotor = new NXTRegulatedMotor(MotorPort.A);
+		NXTRegulatedMotor rightMotor = new NXTRegulatedMotor(MotorPort.B);
 		CompassSensor compass = new CompassSensor(SensorPort.S3);
-		CompassPilot pilot = new CompassPilot(compass, 2.9255357f, 16.19250f, Motor.A, Motor.B);
+		CompassPilot pilot = new CompassPilot(compass, 2.3867536f, 16.19250f, leftMotor, rightMotor);
+		//DifferentialPilot pilot = new DifferentialPilot(2.3867536f, 16.19250f, Motor.A, Motor.B);
 		pilot.setTravelSpeed(20.0f);
 		pilot.setRotateSpeed(20.0f);
+		pilot.setAcceleration(150);
 		Navigator nav = new Navigator(compass, pilot);
 
-		nav.travel(50);
-		try {
-			Thread.sleep(6000);
-		} catch (InterruptedException e) {
-			
+		nav.navigateTo(40.0, 40.0);
+		LCD.drawString("Traveling: " + nav.isTraveling(), 0, 1);
+		while (leftMotor.isMoving() || rightMotor.isMoving()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				
+			}
 		}
-		nav.emergencyStop();
+		nav.navigateTo(-40.0, 40.0);
+		while (leftMotor.isMoving() || rightMotor.isMoving()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				
+			}
+		}
+		nav.navigateTo(5.0, 15.0);
+		while (leftMotor.isMoving() || rightMotor.isMoving()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				
+			}
+		}
+		nav.navigateTo(7.0, -19.0);
+		while (leftMotor.isMoving() || rightMotor.isMoving()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				
+			}
+		}
+		nav.navigateTo(-9.0, 11.0);
+		while (leftMotor.isMoving() || rightMotor.isMoving()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				
+			}
+		}
+		nav.navigateTo(10.0, 15.0);
+		while (leftMotor.isMoving() || rightMotor.isMoving()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				
+			}
+		}
 		nav.navigateBackToZero();
+		while (leftMotor.isMoving() || rightMotor.isMoving()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				
+			}
+		}
+		/*nav.travel(2.54);
 		Button.ENTER.waitForPress();
+		nav.travel(2.54);
+		Button.ENTER.waitForPress();
+		nav.travel(2.54);
+		Button.ENTER.waitForPress();
+		nav.travel(2.54);
+		Button.ENTER.waitForPress();
+		nav.travel(2.54);
+		Button.ENTER.waitForPress();
+		nav.travel(2.54);
+		Button.ENTER.waitForPress();
+		nav.travel(2.54);
+		Button.ENTER.waitForPress();
+		nav.travel(2.54);
+		Button.ENTER.waitForPress();
+		nav.travel(2.54);
+		Button.ENTER.waitForPress();*/
 	}
 	
 	
