@@ -15,10 +15,13 @@ public class Robot2 {
 	    	colorDetector = new ColorSensorDetector(colorSense);
 	    	comm = new B2Comm();
 		
+	    	boolean receivedCommand = false;
 		while ( comm.isConnected() ) {
-		    boolean receivedCommand = comm.waitingForCommand();
-		    
-		    
+		    receivedCommand = comm.waitingForCommand();
+		    if ( receivedCommand ) {
+			boolean isRed = colorDetector.isItRed();
+			comm.sendColorData( isRed );
+		    }
 		}
 	}
 	
