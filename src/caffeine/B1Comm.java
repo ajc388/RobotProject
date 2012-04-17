@@ -35,7 +35,8 @@ public class B1Comm {
 	// To return its boolean color value
 	public boolean getColorSensorData() {
 		// Send the request to the B2 communicator
-		boolean isRed = false;
+		byte colorControl = -1;
+	    	boolean isRed = false;
 		boolean request = false;
 		try {
 			request = true;
@@ -47,24 +48,23 @@ public class B1Comm {
 			LCD.drawString("Failed to send request. ", 0, 1);
 			LCD.drawString("Color Sensor ", 0, 2);
 		}
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException ie) {
-			
-		}
+		
 		// Receive boolean response from communicator
-		try {
-			isRed = dis.readBoolean();
-			// Print received data
-			LCD.clear();
-			LCD.drawString("Received colorByte: " + isRed, 0, 1);
-			// Return boolean
-		} catch (IOException e) {
-			LCD.clear();
-			LCD.drawString("Failed to receive color data", 0, 1);
-			e.printStackTrace();
-		}
-		LCD.drawString("skipped everything", 0, 3);
+		while ( colorControl != -1 ) {
+        		try {
+        		    	colorControl = dis.readByte();
+        		    	if ( colorControl == 1) {  isRed = true;  } 
+        		    	else if ( colorControl == 0 ) { isRed = false; }
+        		    	//Print received data
+        			LCD.clear();
+        			LCD.drawString("Received colorByte: " + isRed, 0, 1);
+        			// Return boolean
+        		} catch (IOException e) {
+        			LCD.clear();
+        			LCD.drawString("Failed to receive color data", 0, 1);
+        			e.printStackTrace();
+        		}
+        	}
 		return isRed;
 	}
 }

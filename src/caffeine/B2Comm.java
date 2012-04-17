@@ -56,9 +56,9 @@ public class B2Comm {
             return commandReceived == 1;
 	}
 	
-	public void sendColorData(boolean redBall) {
+	public void sendColorData(byte redBall) {
 	    try {
-		dos.writeBoolean(redBall);
+		dos.writeByte(redBall);
 		LCD.drawString( "Redball data sent: " + redBall , 0 , 1);
 	    } catch (IOException ioe ) {
 		LCD.drawString( "Failed to send data" , 0 , 1);
