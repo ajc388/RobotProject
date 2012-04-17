@@ -64,8 +64,8 @@ public class Robot1 {
 		objectDetector = new ObjectDetector(leftUS, frontUS, rightUS, nav);
 		objectVerifier = new ObjectVerifier(leftUS, frontUS, rightUS, b1, objectDetector, nav);
 		mapper = new Mapper2();
-		lineDetector = new LineDetector(lightSensor, nav);
 		cageController = new CageController(cageMotor);
+		lineDetector = new LineDetector(lightSensor, nav, cageController);
 		
 		
 		//Establish connections to other created objects
@@ -114,7 +114,9 @@ public class Robot1 {
 		while (objectDetector.isDetecting()) {
 			nav.travel(500);
 			nav.waitForTravel();
-			nav.rotate(90);
+			if (objectDetector.isDetecting()) {
+				nav.rotate(90);
+			}
 		}
 	}
 	
@@ -129,6 +131,7 @@ public class Robot1 {
 			nav.travel(25);
 			nav.waitForTravel();
 			cageController.lowerCage();
+			lineDetector.setHasBall();
 		} else {
 			nav.avoidObject();
 		}

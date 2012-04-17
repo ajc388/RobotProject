@@ -95,7 +95,7 @@ public class ObjectVerifier
 				rotatecount = 0;
 				break;
 		}
-		setIsRed();
+		//setIsRed();
 		
 	}
 }
