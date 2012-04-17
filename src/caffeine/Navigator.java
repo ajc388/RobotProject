@@ -127,7 +127,7 @@ public class Navigator {
 		travel(10);
 		waitForTravel();
 		rotate(-90 * i);
-		travel(10);
+		travel(40);
 		waitForTravel();
 		rotate(-90 * i);
 		travel(10);

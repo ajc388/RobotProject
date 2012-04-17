@@ -62,7 +62,7 @@ public class Robot1 {
 		pilot.setAcceleration(150);
 		nav = new Navigator(pilot, leftMotor, rightMotor);
 		objectDetector = new ObjectDetector(leftUS, frontUS, rightUS, nav);
-		//objectVerifier = new ObjectVerifier(leftUS, frontUS, rightUS, b1, objectDetector, nav);
+		objectVerifier = new ObjectVerifier(leftUS, frontUS, rightUS, b1, objectDetector, nav);
 		mapper = new Mapper2();
 		lineDetector = new LineDetector(lightSensor, nav);
 		cageController = new CageController(cageMotor);
@@ -98,7 +98,9 @@ public class Robot1 {
 		while (true) {
 			searchForObjects();
 			verifyObject();
+			break;
 		}
+		nav.navigateHome();
 		
 		
 	}
@@ -116,6 +118,18 @@ public class Robot1 {
 	}
 	
 	public void verifyObject() {
-		
+		int us = 0;
+		if (objectDetector.isBallOnLeft()) us = 1;
+		else if (objectDetector.isBallInFront()) us = 2;
+		else if (objectDetector.isBallOnRight()) us = 3;
+		objectVerifier.navToBall(us);
+		if (objectVerifier.isRed()) {
+			cageController.raiseCage();
+			nav.travel(25);
+			nav.waitForTravel();
+			cageController.lowerCage();
+		} else {
+			nav.avoidObject();
+		}
 	}
 }
