@@ -114,6 +114,7 @@ public class Robot1 {
 		while (objectDetector.isDetecting()) {
 			nav.travel(500);
 			nav.waitForTravel();
+			nav.rotate(90);
 		}
 	}
 	
@@ -123,7 +124,7 @@ public class Robot1 {
 		else if (objectDetector.isBallInFront()) us = 2;
 		else if (objectDetector.isBallOnRight()) us = 3;
 		objectVerifier.navToBall(us);
-		if (objectVerifier.isRed()) {
+		if (!objectVerifier.isRed()) {
 			cageController.raiseCage();
 			nav.travel(25);
 			nav.waitForTravel();

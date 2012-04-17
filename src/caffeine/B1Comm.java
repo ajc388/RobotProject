@@ -35,11 +35,8 @@ public class B1Comm {
 	// To return its boolean color value
 	public boolean getColorSensorData() {
 		// Send the request to the B2 communicator
-<<<<<<< HEAD
-		byte colorControl =  (byte) -1;
-=======
+
 		byte colorControl = (byte)2;
->>>>>>> 10f369f5062665e38b106706baf1a1b15c2c1ce9
 	    	boolean isRed = false;
 		boolean request = false;
 		try {
@@ -54,19 +51,12 @@ public class B1Comm {
 		}
 		
 		// Receive boolean response from communicator
-<<<<<<< HEAD
-		while ( colorControl != (byte)-1 ) {
-        		try {
-        		    	colorControl = dis.readByte();
-        		    	if ( colorControl == (byte) 1) {  isRed = true;  } 
-        		    	else if ( colorControl == (byte) 0 ) { isRed = false; }
-=======
+
 		while ( colorControl != (byte)2 ) {
         		try {
         		    	colorControl = dis.readByte();
         		    	if ( colorControl == (byte)1) {  isRed = true;  } 
         		    	else if ( colorControl == (byte)0 ) { isRed = false; }
->>>>>>> 10f369f5062665e38b106706baf1a1b15c2c1ce9
         		    	//Print received data
         			LCD.clear();
         			LCD.drawString("Received colorByte: " + isRed, 0, 1);
