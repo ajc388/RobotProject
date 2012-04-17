@@ -17,16 +17,11 @@ public class Robot2 {
 		comm = new B2Comm();
 
 		boolean receivedCommand = false;
-		int i = 1;
-		while (comm.isConnected()) {
-			LCD.drawString("Connected fo real", 0, 4);
-			i += 1;
-			LCD.clearDisplay();
-			LCD.drawInt(i, 0, 3);
-			receivedCommand = comm.waitingForCommand();
-			if (receivedCommand) {
-				boolean isRed = colorDetector.isItRed();
-				comm.sendColorData(isRed);
+		while ( comm.isConnected()) {
+		    	LCD.drawString("Command received =  " + receivedCommand , 0 , 5);
+			if ( receivedCommand = comm.waitingForCommand() ) {
+        			boolean isRed = colorDetector.isItRed();
+        			comm.sendColorData(isRed);
 			}
 		}
 		LCD.drawString("Exited loop.", 0, 2);
