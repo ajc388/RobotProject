@@ -17,13 +17,9 @@ public class LineDetector implements Runnable {
 			if(ls.getLightValue() > 88)
 			{
 				nav.emergencyStop();
-			    try {
 				nav.rotate(180);
 				nav.travel(10);
-				Thread.sleep(1000);
-			    } catch (InterruptedException e) {
-				nav.travel(20);
-			    }
+				nav.waitForTravel();
 			}
 		}
 		

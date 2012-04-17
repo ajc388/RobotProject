@@ -40,12 +40,13 @@ public class Navigator {
 		this.compass = compass;
 		this.pilot = pilot;
 		
+		compass.resetCartesianZero();
+		
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
 
 		listenToMapper = true;
 		
-		compass.resetCartesianZero();
 		x = 0;
 		y = 0;
 		lastX = x;

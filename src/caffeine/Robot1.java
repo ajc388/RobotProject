@@ -71,7 +71,12 @@ public class Robot1 {
 		//Startup sequence should go here. Leave the start boundaries 
 		//before starting the object and line detecting.
 		
-		new Thread(lineDetector).start();
+		nav.travel(20);
+		nav.waitForTravel();
+		
+		Thread lineThread = new Thread(lineDetector);
+		lineThread.start();
+		
 		//new Thread(b1).start();
 		
 		/*
@@ -86,7 +91,12 @@ public class Robot1 {
 		 * Go home
 		 */
 		
-		nav.travel(50);
+		nav.travel(500);
+		nav.waitForTravel();
+		nav.rotate(45);
+		nav.travel(40);
+		nav.waitForTravel();
+		nav.navigateHome();
 		nav.waitForTravel();
 	}
 }

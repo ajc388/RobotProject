@@ -27,6 +27,7 @@ public class ObjectDetector{
 	}
 
 	public void processRight (int dist){
+		nav.emergencyStop();
 		if (listening){//We are listening for a new object detected
 			//We're not waiting for new input, so start
 			listening = false;
@@ -58,6 +59,7 @@ public class ObjectDetector{
 	}
 
 	public void processLeft(int dist) {
+		nav.emergencyStop();
 		if (listening){//We are listening for a new object detected
 			//We're not waiting for new input, so start
 			listening = false;
@@ -85,6 +87,10 @@ public class ObjectDetector{
 			double deltaXT = DELTAX*cosD(heading) - DELTAY*sinD(heading);
 			double deltaYT = DELTAX*sinD(heading) + DELTAY*cosD(heading);
 			nav.navigateTo((long)(nav.getX()+deltaXT), (long)(nav.getY()+deltaYT));
+			
+			//maybe need to put this somewhere else
+			nav.waitForTravel();
+			
 			//if it's red, head home
 			//if it's blue, then:
 			waitingOnSecondLeft = false;
