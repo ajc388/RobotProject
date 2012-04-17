@@ -51,6 +51,10 @@ public class ObjectDetector implements Runnable {
 		ballOnLeft = false;
 	}
 	
+	public boolean isDetecting() {
+		return detecting;
+	}
+	
 	public boolean isBallOnRight() {
 		return ballOnRight;
 	}
