@@ -3,9 +3,12 @@ import lejos.nxt.addon.ColorSensorHT;
 public class ObjectVerifier
 {
 	ColorSensorHT color;
-	public ObjectVerifier(ColorSensorHT cs)
+	B2Comm communicator;
+	
+	public ObjectVerifier(ColorSensorHT cs, B2Comm comm)
 	{	
 	    color = cs;
+	    communicator = new B2Comm();
 	}
 	public boolean isItRed()
 	{

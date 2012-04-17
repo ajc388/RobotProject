@@ -1,8 +1,7 @@
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import javax.bluetooth.RemoteDevice;
-
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.comm.BTConnection;
@@ -14,7 +13,9 @@ import lejos.nxt.comm.Bluetooth;
  */
 public class B2Comm {
 	private DataOutputStream dos;
-
+	private DataInputStream dis;
+	private boolean connected;
+	
 	public B2Comm(){
 		//Constructor
 		String name = "caffeine";
@@ -28,27 +29,44 @@ public class B2Comm {
 		}
 
 		BTConnection btc = Bluetooth.connect(btrd);
-
 		if (btc == null) {
 			LCD.clear();
 			LCD.drawString("Connect fail", 0, 0);
 			Button.waitForPress();
 			System.exit(1);
 		}
-
 		LCD.clear();
 		LCD.drawString("Connected", 0, 0);
+		connected = true;
 		dos = btc.openDataOutputStream();
+		dis = btc.openDataInputStream();
 	}
 
-
-	public void sendReading(byte US, byte dist){
-		//Send which US it's from and the distance
-		try {
-			dos.writeByte(US);
-			dos.writeByte(dist);
-		} catch (IOException e) {
-		}
-
+	public boolean waitingForCommand( ) {
+	    boolean commandReceived = false;
+	    try {
+		commandReceived = dis.readBoolean();
+		LCD.clear();
+		LCD.drawString("Command was received", 0 , 1);
+	    } catch (IOException ioe ) {
+		LCD.clear();
+		LCD.drawString("Did not receive a command", 0 , 1);
+	    }
+	    return commandReceived;
+	}
+	
+	
+	    try {
+		dos.writeByte(redBall);
+		LCD.drawString( "Data sent " + redBall , 0 , 1);
+			
+	    } catch (IOException ioe ) {
+		LCD.drawString( "Failed to send data" , 0 , 1);
+	    }
+	}
+	
+	//Getters
+	public boolean isConnected() {
+	    return connected;
 	}
 }
