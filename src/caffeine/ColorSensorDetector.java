@@ -10,7 +10,7 @@ public class ColorSensorDetector {
     public byte isItRed()
     {
     	//Scans ahead of it, returns true if detecting a red ball, otherwise false
-    	if(color.getColor().getRed() > color.getColor().getBlue()) { return 1;  }
-    	else { return 0; }
+    	if(color.getColor().getRed() > color.getColor().getBlue()) { return (byte)1;  }
+    	else { return (byte)0; }
     }
 }
