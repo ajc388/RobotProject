@@ -43,8 +43,8 @@ public class B2Comm {
 	}
 
 	public boolean waitingForCommand( ) {
-	    byte commandReceived = 0;
-	    while ( commandReceived == 0 ) {
+	    byte commandReceived = (byte)0;
+	    while ( commandReceived == (byte)0 ) {
         	    try {
         		commandReceived = dis.readByte();
         		LCD.drawString("Command was received", 0 , 1);
@@ -53,7 +53,7 @@ public class B2Comm {
         		LCD.drawString("Did not receive a command", 0 , 1);
         	    }
 	    }
-            return commandReceived == 1;
+            return commandReceived == (byte)1;
 	}
 	
 	public void sendColorData(byte redBall) {
