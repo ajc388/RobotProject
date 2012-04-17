@@ -10,22 +10,26 @@ import lejos.robotics.navigation.CompassPilot;
 public class Robot1 {
 
 
-	private static NXTRegulatedMotor cageMotor, leftMotor, rightMotor;
-	private static Mapper mapper;
-	private static CageController cageController;
-	private static Navigator nav;
-	private static CompassPilot pilot;
-	private static CompassSensor compass;
-	private static ObjectVerifier objectVerifier;
-	private static ObjectDetector objectDetector;
-	private static ColorSensorHT colorSense;
-	private static LineDetector lineDetector;
-	private static B1Comm b1;
-	private static LightSensor2 lightSensor;
+	private NXTRegulatedMotor cageMotor, leftMotor, rightMotor;
+	private Mapper2 mapper;
+	private CageController cageController;
+	private Navigator nav;
+	private CompassPilot pilot;
+	private CompassSensor compass;
+	private ObjectVerifier objectVerifier;
+	private ObjectDetector objectDetector;
+	private ColorSensorHT colorSense;
+	private LineDetector lineDetector;
+	private B1Comm b1;
+	private LightSensor2 lightSensor;
 	
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
-	    //Instantiate motors
+	    new Robot1();
+	}
+	
+	public Robot1() {
+		//Instantiate motors
 	    cageMotor = new NXTRegulatedMotor(MotorPort.C);
 		leftMotor = new NXTRegulatedMotor(MotorPort.A);
 		rightMotor = new NXTRegulatedMotor(MotorPort.B);
@@ -55,7 +59,7 @@ public class Robot1 {
 		nav = new Navigator(compass, pilot, leftMotor, rightMotor);
 		objectVerifier = new ObjectVerifier(colorSense);
 		objectDetector = new ObjectDetector(nav);
-		//mapper = new Mapper();
+		mapper = new Mapper2();
 		lineDetector = new LineDetector(lightSensor, nav);
 		cageController = new CageController(cageMotor);
 		
@@ -63,10 +67,7 @@ public class Robot1 {
 		//Establish connections to other created objects
 		b1.setObjectDetector(objectDetector);
 		
-		LCD.drawString("Got here", 1, 0);
-		
-		Button.ENTER.waitForPressAndRelease();
-		
+
 		//Startup sequence should go here. Leave the start boundaries 
 		//before starting the object and line detecting.
 		
@@ -86,12 +87,6 @@ public class Robot1 {
 		 */
 		
 		nav.travel(50);
-		while (nav.isTraveling()) {
-		    try {
-			Thread.sleep(100);
-		    } catch (InterruptedException e) {
-			
-		    }
-		}
+		nav.waitForTravel();
 	}
 }

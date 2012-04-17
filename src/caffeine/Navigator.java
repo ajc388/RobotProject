@@ -96,7 +96,7 @@ public class Navigator {
 		curAngle = angle + curAngle;
 	}
 
-	public void navigateBackToZero() {
+	public void navigateHome() {
 		navigateTo(0, 0);
 	}
 	
@@ -119,6 +119,25 @@ public class Navigator {
 		
 		travel(0);
 	}
+	
+	public void avoidObject() {
+		avoidObject(true);
+	}
+	
+	public void avoidObject(boolean toTheRight) {
+		int i = 1;
+		if (toTheRight) i = -1; 
+		rotate(90 * i);
+		travel(10);
+		waitForTravel();
+		rotate(-90 * i);
+		travel(10);
+		waitForTravel();
+		rotate(-90 * i);
+		travel(10);
+		waitForTravel();
+		rotate(90 * i);
+	}
 
 	private double calcAngleTo(double dx, double dy) {
 		//This is bad, but should work, it just won't always make the shortest turn at the moment.
@@ -135,6 +154,16 @@ public class Navigator {
 	
 	public boolean isTraveling() {
 		return leftMotor.isMoving() || rightMotor.isMoving();
+	}
+	
+	public void waitForTravel() {
+		while (isTraveling()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				
+			}
+		}
 	}
 	
 	public void toggleListenToMapper(boolean listenToMapper) {
@@ -165,98 +194,4 @@ public class Navigator {
 		return curAngle;
 	}
 	
-	/*public static void main(String[] args) {
-		Button.ENTER.waitForPress();
-		
-		NXTRegulatedMotor leftMotor = new NXTRegulatedMotor(MotorPort.A);
-		NXTRegulatedMotor rightMotor = new NXTRegulatedMotor(MotorPort.B);
-		CompassSensor compass = new CompassSensor(SensorPort.S3);
-		CompassPilot pilot = new CompassPilot(compass, 2.3867536f, 16.19250f, leftMotor, rightMotor);
-		//DifferentialPilot pilot = new DifferentialPilot(2.3867536f, 16.19250f, Motor.A, Motor.B);
-		pilot.setTravelSpeed(20.0f);
-		pilot.setRotateSpeed(20.0f);
-		pilot.setAcceleration(150);
-		Navigator nav = new Navigator(compass, pilot, leftMotor, rightMotor);
-
-		nav.navigateTo(40.0, 40.0);
-		LCD.drawString("Traveling: " + nav.isTraveling(), 0, 1);
-		while (nav.isTraveling()) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				
-			}
-		}
-		nav.navigateTo(-40.0, 40.0);
-		while (nav.isTraveling()) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				
-			}
-		}
-		nav.navigateTo(5.0, 15.0);
-		while (leftMotor.isMoving() || rightMotor.isMoving()) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				
-			}
-		}
-		nav.navigateTo(7.0, -19.0);
-		while (leftMotor.isMoving() || rightMotor.isMoving()) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				
-			}
-		}
-		nav.navigateTo(-9.0, 11.0);
-		while (leftMotor.isMoving() || rightMotor.isMoving()) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				
-			}
-		}
-		nav.navigateTo(10.0, 15.0);
-		while (leftMotor.isMoving() || rightMotor.isMoving()) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				
-			}
-		}
-		nav.navigateBackToZero();
-		while (leftMotor.isMoving() || rightMotor.isMoving()) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				
-			}
-		}
-		/*nav.travel(2.54);
-		Button.ENTER.waitForPress();
-		nav.travel(2.54);
-		Button.ENTER.waitForPress();
-		nav.travel(2.54);
-		Button.ENTER.waitForPress();
-		nav.travel(2.54);
-		Button.ENTER.waitForPress();
-		nav.travel(2.54);
-		Button.ENTER.waitForPress();
-		nav.travel(2.54);
-		Button.ENTER.waitForPress();
-		nav.travel(2.54);
-		Button.ENTER.waitForPress();
-		nav.travel(2.54);
-		Button.ENTER.waitForPress();
-		nav.travel(2.54);
-		Button.ENTER.waitForPress();
-	}*/
-	
-	
-//Steffen, just put the code you already made in here
-//Add things to notify the mapper that you're at coordinates at the end of movement, request new ones
-//Add stop command to override current movement when a line or ball is detected
 }
