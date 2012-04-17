@@ -4,7 +4,6 @@ import java.util.Stack;
 public class Mapper2 {
 	
 	private ArrayList<Coordinates> knownBalls;
-	private Stack<Coordinates> placesToVisit;
 	
 	public Mapper2() {
 		knownBalls = new ArrayList<Coordinates>();
@@ -14,16 +13,26 @@ public class Mapper2 {
 		knownBalls.add(new Coordinates(x, y));
 	}
 	
-	public double getNextX() {
-		return placesToVisit.peek().getX();
-	}
-	
-	public double getNextY() {
-		return placesToVisit.peek().getY();
-	}
-	
-	public void prepareForNext() {
-		placesToVisit.pop();
+	/**
+	 * *guess* if we have already know about this ball or not.
+	 */
+	public boolean alreadyDetectedThisBall(double robotX, double robotY, double robotAngle, int distToBall) {
+		double dx = Math.cos(Math.toRadians(robotAngle)) * distToBall;
+		double dy = Math.sin(Math.toRadians(robotAngle)) * distToBall;
+		
+		double approximateX = robotX + dx;
+		double approximateY = robotY + dy;
+		
+		for (Coordinates knownBall : knownBalls) {
+			if(knownBall.getX() < approximateX + 5 && 
+					knownBall.getX() > approximateX - 5 ||
+					knownBall.getY() < approximateY + 5 && 
+					knownBall.getY() > approximateY - 5) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	class Coordinates {
