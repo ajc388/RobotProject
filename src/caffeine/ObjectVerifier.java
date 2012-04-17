@@ -70,7 +70,7 @@ public class ObjectVerifier
 				{
 					nav.rotate(5);
 				}
-				nav.travel(front.getDistance() - 15);
+				nav.travel(front.getDistance() - 10);
 				nav.waitForTravel();
 				rotatecount = 0;
 				break;
