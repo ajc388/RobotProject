@@ -55,7 +55,7 @@ public class B2Comm {
 	    return commandReceived;
 	}
 	
-	public boolean sendColorData(boolean redBall) {
+	public void sendColorData(boolean redBall) {
 	    try {
 		dos.writeBoolean(redBall);
 		LCD.drawString( "Redball data sent: " + redBall , 0 , 1);
