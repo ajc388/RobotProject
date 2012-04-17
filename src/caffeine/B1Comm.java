@@ -29,7 +29,6 @@ public class B1Comm implements Runnable {
 	public void setObjectDetector(ObjectDetector od){
 		//Sets the object detector reference and starts the scanning
 		this.od = od;
-		new Thread(this).start();
 	}
 
 	public void run() {
