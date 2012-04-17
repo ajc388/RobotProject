@@ -1,11 +1,7 @@
-import lejos.nxt.Button;
-import lejos.nxt.LCD;
-import lejos.nxt.Motor;
-import lejos.nxt.MotorPort;
 import lejos.nxt.NXTRegulatedMotor;
-import lejos.nxt.SensorPort;
 import lejos.nxt.addon.CompassSensor;
 import lejos.robotics.navigation.CompassPilot;
+import lejos.robotics.navigation.DifferentialPilot;
 
 @SuppressWarnings("deprecation")
 public class Navigator {
@@ -16,8 +12,8 @@ public class Navigator {
 	 * Uses CompassPilot to navigate to certain points.
 	 */
 
-	private CompassSensor compass;
-	private CompassPilot pilot;
+	//private CompassSensor compass;
+	private DifferentialPilot pilot;
 	//private DifferentialPilot pilot;
 
 	/** Simple representation of a point */
@@ -36,11 +32,10 @@ public class Navigator {
 	 * @param compass - takes a compass so we can abstract away from port selection
 	 * @param pilot - takes a pilot so we can set that up elsewhere
 	 */
-	public Navigator(CompassSensor compass, CompassPilot pilot, NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
-		this.compass = compass;
+	public Navigator(DifferentialPilot pilot, NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor) {
 		this.pilot = pilot;
 		
-		compass.resetCartesianZero();
+		//compass.resetCartesianZero();
 		
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
