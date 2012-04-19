@@ -157,6 +157,7 @@ public class Robot1 {
 				cageController.raiseCage();
 				nav.travel(-15);
 				nav.waitForTravel();
+				home = true;
 			}
 		}
 	}
