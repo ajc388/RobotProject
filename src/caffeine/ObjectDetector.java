@@ -10,6 +10,9 @@ public class ObjectDetector implements Runnable {
 
 	private boolean detecting;
 	private boolean ballOnRight, ballOnLeft, ballInFront;
+	
+	// If we already have the ball we should ignore anything we see on the sides.
+	private boolean checkSides;
 
 	public ObjectDetector(UltrasonicSensor leftUS, UltrasonicSensor frontUS,
 			UltrasonicSensor rightUS, Navigator nav) {
@@ -27,7 +30,7 @@ public class ObjectDetector implements Runnable {
 	public void run() {
 		while (true) {
 			while (detecting) {
-				if (leftUS.getDistance() < 40) {
+				if (leftUS.getDistance() < 40 && checkSides) {
 					detecting = false;
 					ballOnLeft = true;
 					nav.emergencyStop();
@@ -35,7 +38,7 @@ public class ObjectDetector implements Runnable {
 					detecting = false;
 					ballInFront = true;
 					nav.emergencyStop();
-				} else if (rightUS.getDistance() < 40) {
+				} else if (rightUS.getDistance() < 40 && checkSides) {
 					detecting = false;
 					ballOnRight = true;
 					nav.emergencyStop();
@@ -44,11 +47,14 @@ public class ObjectDetector implements Runnable {
 		}
 	}
 	
-	public void setDetecting() {
+	public void setDetecting(boolean hasBall) {
 		detecting = true;
 		ballOnRight = false;
 		ballInFront = false;
 		ballOnLeft = false;
+		
+		// Set checkSides to opposite of hasBall.
+		checkSides = !hasBall;
 	}
 	
 	public boolean isDetecting() {

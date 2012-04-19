@@ -72,37 +72,28 @@ public class Robot1 {
 		
 
 		//Startup sequence should go here. Leave the start boundaries 
-		//before starting the object and line detecting.
+		//before starting the line detecting.
+		
+		Thread detectorThread = new Thread(objectDetector);
+		detectorThread.start();
 		
 		startupSequence();
 		
 		Thread lineThread = new Thread(lineDetector);
 		lineThread.start();
-		Thread detectorThread = new Thread(objectDetector);
-		detectorThread.start();
 		
-		//new Thread(b1).start();
-		
-		/*
-		 * While red ball is not found:
-		 * 	If ObjectDetector not examining an object
-		 * 		Ask mapper for new coordinates to explore
-		 * 			while navigator is travelling or investigating a ball 
-		 * 				Sleep for 100 ms
-		 * 			If we found red, continue loop
-		 * 			Explore those coordinates
-		 * 			
-		 * Go home
-		 */
-		
-		while (true) {
+		boolean searching = true;
+		while (searching) {
 			searchForObjects();
 			verifyObject();
-			break;
+			if (cageController.hasBall()) {
+				goHomeAndDropBall();
+				searching = false;
+			}
 		}
-		nav.navigateHome();
 		
-		
+		lineThread.interrupt();
+		detectorThread.interrupt();
 	}
 	
 	public void startupSequence() {
@@ -114,8 +105,19 @@ public class Robot1 {
 		while (objectDetector.isDetecting()) {
 			nav.travel(500);
 			nav.waitForTravel();
+			
+			// If it is still detecting, lineDetector must have stopped it.
+			// move away from line and turn 90 degrees.
+			// TODO: Maybe find a way to make to robot travel perpendicular to the line?
 			if (objectDetector.isDetecting()) {
-				nav.rotate(90);
+				try {
+					nav.rotate(180);
+					nav.travel(20);
+					nav.waitForTravel();
+					nav.rotate(90);
+				} catch (InterruptedException e) {
+					
+				}
 			}
 		}
 	}
@@ -126,14 +128,36 @@ public class Robot1 {
 		else if (objectDetector.isBallInFront()) us = 2;
 		else if (objectDetector.isBallOnRight()) us = 3;
 		objectVerifier.navToBall(us);
-		if (!objectVerifier.isRed()) {
+		if (objectVerifier.isRed()) {
 			cageController.raiseCage();
 			nav.travel(25);
 			nav.waitForTravel();
 			cageController.lowerCage();
-			lineDetector.setHasBall();
+			cageController.setCaptured();
 		} else {
 			nav.avoidObject();
+		}
+		
+		//Turn object detecting back on
+		objectDetector.setDetecting(cageController.hasBall());
+	}
+	
+	public void goHomeAndDropBall() {
+		boolean home = false;
+		while (!home) {
+			nav.navigateHome();
+			nav.waitForTravel();
+			// done moving. check if stopped by object or if stopped by line.
+			// if stopped by line drop ball. This should be home.
+			if (!objectDetector.isDetecting()) {
+				// if ball is on (-x) side of field, avoid it to the right.
+				nav.avoidObject(nav.getX() < 0);
+				objectDetector.setDetecting(true);
+			} else {
+				cageController.raiseCage();
+				nav.travel(-15);
+				nav.waitForTravel();
+			}
 		}
 	}
 }
