@@ -97,6 +97,7 @@ public class Robot1 {
 	}
 	
 	public void startupSequence() {
+		nav.rotate(90);
 		nav.travel(20);
 		nav.waitForTravel();
 	}
