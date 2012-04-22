@@ -127,7 +127,7 @@ public class Robot1 {
 		objectVerifier.navToBall(us);
 		if (objectVerifier.isRed()) {
 			cageController.raiseCage();
-			nav.travel(25);
+			nav.travel(20);
 			nav.waitForTravel();
 			cageController.lowerCage();
 			cageController.setCaptured();

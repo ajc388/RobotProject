@@ -13,7 +13,7 @@ public class ColorSensorDetector {
     	//Scans ahead of it, returns true if detecting a red ball, otherwise false
     	Color c = color.getColor();
     	LCD.drawString("R:" + c.getRed() + " B:" + c.getBlue(), 0, 2);
-    	if(c.getRed() > c.getBlue()) { return 1;  }
+    	if(c.getRed() > c.getBlue()) { return 1; }
     	else { return 0; }
     }
 }
