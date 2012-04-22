@@ -45,12 +45,12 @@ public class ObjectVerifier
 			nav.travel(5);
 			nav.waitForTravel();
 		}*/
-		while(front.getDistance() < 60)
+		while(front.getDistance() < 50)
 		{
 			nav.rotate(5);
 		}
 		nav.rotate(-10);
-		while(front.getDistance() < 60)
+		while(front.getDistance() < 50)
 		{
 			nav.rotate(-5);
 			rotatecount++;
@@ -62,7 +62,7 @@ public class ObjectVerifier
 				}*/
 		//Insures that it doesnt go further than 
 		//The sensor should have detected
-		if ( front.getDistance() < 60 ) {
+		if ( front.getDistance() < 50 ) {
         		nav.travel(front.getDistance() - 15);
         		nav.waitForTravel();
         		rotatecount = 0;
@@ -79,7 +79,7 @@ public class ObjectVerifier
 	    double distance = front.getDistance();
 	    int loopIterations = 0;
 	    while( loopIterations < 25 && 
-		   !(distance >= 0 && distance <= 60) ) {
+		   !(distance >= 0 && distance <= 50) ) {
 		    //Check to see where its supposed to rotate 
 		    if ( left ) {
 			//Rotate left
@@ -89,6 +89,7 @@ public class ObjectVerifier
         		nav.rotate(-5);
         	    }
 		    loopIterations++;
+		    distance = front.getDistance();
 	    }
 	}
 
