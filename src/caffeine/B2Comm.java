@@ -49,6 +49,7 @@ public class B2Comm {
 	public void sendColorData(byte redBall) {
 	    try {
 		dos.writeByte(redBall);
+		dos.flush();
 		LCD.drawString( "Redball data sent: " + redBall , 0 , 1);
 	    } catch (IOException ioe ) {
 		LCD.drawString( "Failed to send data" , 0 , 1);

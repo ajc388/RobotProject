@@ -33,15 +33,15 @@ public class B1Comm {
 	// If it is blue it will return false
 	// To accomplish this it asks the other brick to use its color sensor
 	// To return its boolean color value
-	public boolean getColorSensorData() {
+	public boolean getColorSensorData() {// Returns true for red?  Please confirm!
 		// Send the request to the B2 communicator
-
-		byte colorControl = (byte)2;
-	    	boolean isRed = false;
+		//byte colorControl = 2;
+		//boolean isRed = false;
 		boolean request = false;
 		try {
 			request = true;
-			dos.writeByte((byte)1);
+			dos.writeByte(1);
+			dos.flush();
 			LCD.clear();
 			LCD.drawString("Sent object request", 0, 1);
 		} catch (IOException ioe) {
@@ -51,12 +51,12 @@ public class B1Comm {
 		}
 		
 		// Receive boolean response from communicator
-
-		while ( colorControl != (byte)2 ) {
+		return (dis.readByte()==1); //readByte is blocking, so we don't need a loop.
+		/*while ( colorControl != 2 ) { //It will never NOT be 2... so this loop will never run, and will always return false.
         		try {
         		    	colorControl = dis.readByte();
-        		    	if ( colorControl == (byte)1) {  isRed = true;  } 
-        		    	else if ( colorControl == (byte)0 ) { isRed = false; }
+        		    	if ( colorControl == 1) {  isRed = true;  } 
+        		    	else if ( colorControl == 0 ) { isRed = false; }
         		    	//Print received data
         			LCD.clear();
         			LCD.drawString("Received colorByte: " + isRed, 0, 1);
@@ -67,6 +67,6 @@ public class B1Comm {
         			e.printStackTrace();
         		}
         	}
-		return isRed;
+		return isRed;*/
 	}
 }
