@@ -53,9 +53,9 @@ public class B1Comm {
 		// Receive boolean response from communicator
 		try {
 			isRed = (dis.readByte()==1); //readByte is blocking, so we don't need a loop.
-		} catch (IOException e) {
-			
-		}
+			LCD.drawString("Received colorByte: " + isRed, 0, 1);
+        		
+		} catch (IOException ioe) {}
 		/*while ( colorControl != 2 ) { //It will never NOT be 2... so this loop will never run, and will always return false.
         		try {
         		    	colorControl = dis.readByte();
