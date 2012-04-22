@@ -36,7 +36,7 @@ public class B1Comm {
 	public boolean getColorSensorData() {// Returns true for red?  Please confirm!
 		// Send the request to the B2 communicator
 		//byte colorControl = 2;
-		//boolean isRed = false;
+		boolean isRed = false;
 		boolean request = false;
 		try {
 			request = true;
@@ -51,7 +51,11 @@ public class B1Comm {
 		}
 		
 		// Receive boolean response from communicator
-		return (dis.readByte()==1); //readByte is blocking, so we don't need a loop.
+		try {
+			isRed = (dis.readByte()==1); //readByte is blocking, so we don't need a loop.
+		} catch (IOException e) {
+			
+		}
 		/*while ( colorControl != 2 ) { //It will never NOT be 2... so this loop will never run, and will always return false.
         		try {
         		    	colorControl = dis.readByte();
@@ -66,7 +70,7 @@ public class B1Comm {
         			LCD.drawString("Failed to receive color data", 0, 1);
         			e.printStackTrace();
         		}
-        	}
-		return isRed;*/
+        	}*/
+		return isRed;
 	}
 }

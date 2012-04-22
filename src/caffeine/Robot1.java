@@ -110,10 +110,11 @@ public class Robot1 {
 			// move away from line and turn 90 degrees.
 			// TODO: Maybe find a way to make to robot travel perpendicular to the line?
 			if (objectDetector.isDetecting()) {
-				nav.rotate(180);
-				nav.travel(20);
+				lineDetector.setOnLine(true);
+				nav.travel(-20);
 				nav.waitForTravel();
-				nav.rotate(90);
+				lineDetector.setOnLine(false);
+				nav.rotate(-90);
 			}
 		}
 	}
