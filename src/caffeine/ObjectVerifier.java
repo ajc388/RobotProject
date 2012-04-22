@@ -35,9 +35,11 @@ public class ObjectVerifier
 		int rotatecount = 0;
 		switch(ultrasonic)
 		{
-		case 1: nav.rotate(70); break;
+		//Turn left
+		case 1: rotateToFrontSensor(true); break;
 		case 2: break;
-		case 3: nav.rotate(-70); break;
+		//Turn right
+		case 3: rotateToFrontSensor(false); break;
 		}
 		/*while (front.getDistance() > 60){//In case we're not quite in range, and stopped sensing it, move forward a bit.
 			nav.travel(5);
@@ -68,6 +70,26 @@ public class ObjectVerifier
 		}	
 		
 
+	}
+	
+	//Once an object is detected from the left or right sensor
+	//It will rotate to the object (either left or right)
+	//Until it detects the object on the front sensor.
+	public void rotateToFrontSensor(boolean left) {
+	    double distance = front.getDistance();
+	    int loopIterations = 0;
+	    while( loopIterations < 25 && 
+		   !(distance >= 0 && distance <= 60) ) {
+		    //Check to see where its supposed to rotate 
+		    if ( left ) {
+			//Rotate left
+        		nav.rotate(5); 
+        	    } else {
+        		//Rotate right
+        		nav.rotate(-5);
+        	    }
+		    loopIterations++;
+	    }
 	}
 
 }
