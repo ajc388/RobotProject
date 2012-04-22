@@ -43,7 +43,13 @@ public class B2Comm {
 	}
 
 	public boolean waitingForCommand( ) {
-		return (dis.readByte()==1);
+		boolean waiting = false;
+		try {
+			waiting = (dis.readByte()==1);
+		} catch (IOException e) {
+			
+		}
+		return waiting;
 	}
 	
 	public void sendColorData(byte redBall) {

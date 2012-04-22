@@ -61,8 +61,9 @@ public class ObjectVerifier
 		nav.travel(front.getDistance() - 15);
 		nav.waitForTravel();
 		rotatecount = 0;
+		
+		setIsRed();
 
 	}
-	//setIsRed();
 
 }
