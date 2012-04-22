@@ -102,7 +102,7 @@ public class Navigator {
 	 * class is slow and also I don't remember trig off the top
 	 * of my head.
 	 */
-	public synchronized void emergencyStop() {
+	public void emergencyStop() {
 		double distance = pilot.getMovementIncrement();
 		pilot.setAcceleration(100000);
 		pilot.stop(); // API shows method quickStop() but it doesn't seem to be included. Use stop() for now.
@@ -123,16 +123,16 @@ public class Navigator {
 	public void avoidObject(boolean toTheRight) {
 		int i = 1;
 		if (toTheRight) i = -1; 
-		rotate(110 * i);
+		rotate(90 * i);
 		travel(20);
 		waitForTravel();
-		rotate(-70 * i);
+		rotate(-90 * i);
 		travel(50);
 		waitForTravel();
-		rotate(-70 * i);
+		rotate(-90 * i);
 		travel(20);
 		waitForTravel();
-		rotate(110 * i);
+		rotate(90 * i);
 	}
 
 	private double calcAngleTo(double dx, double dy) {
