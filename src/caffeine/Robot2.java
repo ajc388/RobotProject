@@ -19,11 +19,11 @@ public class Robot2 {
 
 		boolean receivedCommand = false;
 		while ( comm.isConnected()) {
-		    	LCD.drawString("Command received =  " + receivedCommand , 0 , 5);
-		    	Sound.beepSequenceUp();
+			//LCD.drawString("Command received =  " + receivedCommand , 0 , 5);
+			Sound.beepSequenceUp();
 			if ( receivedCommand = comm.waitingForCommand() ) {
-        			byte isRed = colorDetector.isItRed();
-        			comm.sendColorData(isRed);
+				byte isRed = colorDetector.isItRed();
+				comm.sendColorData(isRed);
 			}
 		}
 		LCD.drawString("Exited loop.", 0, 2);

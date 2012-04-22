@@ -5,7 +5,6 @@ import lejos.nxt.addon.ColorSensorHT;
 public class ColorSensorDetector {
  
     ColorSensorHT color;
-    B2Comm communicator;
     	
     public ColorSensorDetector(ColorSensorHT cs) {  color = cs; }
     
