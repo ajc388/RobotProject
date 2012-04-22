@@ -39,10 +39,10 @@ public class ObjectVerifier
 		case 2: break;
 		case 3: nav.rotate(-70); break;
 		}
-		while (front.getDistance() > 60){//In case we're not quite in range, and stopped sensing it, move forward a bit.
+		/*while (front.getDistance() > 60){//In case we're not quite in range, and stopped sensing it, move forward a bit.
 			nav.travel(5);
 			nav.waitForTravel();
-		}
+		}*/
 		while(front.getDistance() < 60)
 		{
 			nav.rotate(5);
@@ -58,11 +58,15 @@ public class ObjectVerifier
 				{
 					nav.rotate(5);
 				}*/
-		nav.travel(front.getDistance() - 15);
-		nav.waitForTravel();
-		rotatecount = 0;
+		//Insures that it doesnt go further than 
+		//The sensor should have detected
+		if ( front.getDistance() < 60 ) {
+        		nav.travel(front.getDistance() - 15);
+        		nav.waitForTravel();
+        		rotatecount = 0;
+        		setIsRed();
+		}	
 		
-		setIsRed();
 
 	}
 
