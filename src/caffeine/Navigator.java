@@ -123,16 +123,16 @@ public class Navigator {
 	public void avoidObject(boolean toTheRight) {
 		int i = 1;
 		if (toTheRight) i = -1; 
-		rotate(90 * i);
-		travel(10);
+		rotate(110 * i);
+		travel(20);
 		waitForTravel();
-		rotate(-90 * i);
-		travel(40);
+		rotate(-70 * i);
+		travel(50);
 		waitForTravel();
-		rotate(-90 * i);
-		travel(10);
+		rotate(-70 * i);
+		travel(20);
 		waitForTravel();
-		rotate(90 * i);
+		rotate(110 * i);
 	}
 
 	private double calcAngleTo(double dx, double dy) {
