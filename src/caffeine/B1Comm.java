@@ -51,7 +51,14 @@ public class B1Comm {
 		}
 		
 		// Receive boolean response from communicator
-		return (dis.readByte()==1); //readByte is blocking, so we don't need a loop.
+		
+		boolean isRed = false;
+		byte b = dis.readByte();
+		isRed = (b == 1);
+		LCD.drawString("Received colorByte: " + isRed, 0, 1);
+		return (isRed); //readByte is blocking, so we don't need a loop.
+		
+		
 		/*while ( colorControl != 2 ) { //It will never NOT be 2... so this loop will never run, and will always return false.
         		try {
         		    	colorControl = dis.readByte();
@@ -59,7 +66,7 @@ public class B1Comm {
         		    	else if ( colorControl == 0 ) { isRed = false; }
         		    	//Print received data
         			LCD.clear();
-        			LCD.drawString("Received colorByte: " + isRed, 0, 1);
+        			
         			// Return boolean
         		} catch (IOException e) {
         			LCD.clear();
