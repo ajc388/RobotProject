@@ -102,7 +102,7 @@ public class Navigator {
 	 * class is slow and also I don't remember trig off the top
 	 * of my head.
 	 */
-	public void emergencyStop() {
+	public synchronized void emergencyStop() {
 		double distance = pilot.getMovementIncrement();
 		pilot.setAcceleration(100000);
 		pilot.stop(); // API shows method quickStop() but it doesn't seem to be included. Use stop() for now.
