@@ -1,4 +1,5 @@
 import lejos.nxt.LCD;
+import lejos.nxt.ColorSensor.Color;
 import lejos.nxt.addon.ColorSensorHT;
 
 public class ColorSensorDetector {
@@ -11,8 +12,9 @@ public class ColorSensorDetector {
     public byte isItRed()
     {
     	//Scans ahead of it, returns true if detecting a red ball, otherwise false
-    	LCD.drawString("R:" + color.getColor().getRed() + " B:" + color.getColor().getBlue(), 0, 2);
-    	if(color.getColor().getRed() > color.getColor().getBlue()) { return (byte)1;  }
-    	else { return (byte)0; }
+    	Color c = (Color) color.getColor();
+    	LCD.drawString("R:" + c.getRed() + " B:" + c.getBlue(), 0, 2);
+    	if(c.getRed() > c.getBlue()) { return 1;  }
+    	else { return 0; }
     }
 }
