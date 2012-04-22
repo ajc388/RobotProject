@@ -106,7 +106,6 @@ public class Robot1 {
 		while (objectDetector.isDetecting()) {
 			nav.travel(500);
 			nav.waitForTravel();
-			
 			// If it is still detecting, lineDetector must have stopped it.
 			// move away from line and turn 90 degrees.
 			// TODO: Maybe find a way to make to robot travel perpendicular to the line?
@@ -117,7 +116,6 @@ public class Robot1 {
 					nav.waitForTravel();
 					nav.rotate(90);
 				} catch (InterruptedException e) {
-					
 				}
 			}
 		}

@@ -36,7 +36,7 @@ public class CageController
 	
 	public void levelCage()
 	{
-		cagemotor.rotate(-13); //Levels cage parallel to the ground
+		cagemotor.rotate(-13); //Levels cage parallel to the ground, assumes it starts at ground level.
 		cagemotor.stop();
 	}
 }

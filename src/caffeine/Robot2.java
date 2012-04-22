@@ -1,5 +1,6 @@
 import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
+import lejos.nxt.Sound;
 import lejos.nxt.addon.ColorSensorHT;
 
 public class Robot2 {
@@ -19,6 +20,7 @@ public class Robot2 {
 		boolean receivedCommand = false;
 		while ( comm.isConnected()) {
 		    	LCD.drawString("Command received =  " + receivedCommand , 0 , 5);
+		    	Sound.beepSequenceUp();
 			if ( receivedCommand = comm.waitingForCommand() ) {
         			byte isRed = colorDetector.isItRed();
         			comm.sendColorData(isRed);
