@@ -33,18 +33,25 @@ public class ObjectDetector implements Runnable {
 				if ((leftUS.getDistance() < 50) && checkSides) {
 					detecting = false;
 					ballOnLeft = true;
-					nav.emergencyStop();
-				} else if (frontUS.getDistance() < 50) {
+					stopNav();
+					//nav.emergencyStop();
+				} else if (frontUS.getDistance() < 20) {
 					detecting = false;
 					ballInFront = true;
-					nav.emergencyStop();
+					stopNav();
+					//nav.emergencyStop();
 				} else if ((rightUS.getDistance() < 50) && checkSides) {
 					detecting = false;
 					ballOnRight = true;
-					nav.emergencyStop();
+					stopNav();
+					//nav.emergencyStop();
 				}
 			}
 		}
+	}
+	
+	private synchronized void stopNav() {
+		nav.emergencyStop();
 	}
 	
 	public void setDetecting(boolean hasBall) {

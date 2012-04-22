@@ -24,9 +24,13 @@ public class LineDetector implements Runnable {
 		while(true)  {
 			if(ls.getLightValue() > 88 && !onLine)
 			{
-				nav.emergencyStop();
+				stopNav();
 			}
 		}
 		
+	}
+	
+	private synchronized void stopNav() {
+		nav.emergencyStop();
 	}
 }
